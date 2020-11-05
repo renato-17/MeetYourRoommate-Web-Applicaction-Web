@@ -17,5 +17,8 @@ namespace Roommates.API.Domain.Models
         public int? TeamId { get; set; }
         public Team Team { get; set; }
 
+        //Relation with Campus
+        public int CampusId { get; set; }
+        public Campus Campus { get; set; }
     }
 }

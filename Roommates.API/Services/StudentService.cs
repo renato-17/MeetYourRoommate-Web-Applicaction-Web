@@ -13,24 +13,30 @@ namespace Roommates.API.Services
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly ICampusRepository _campusRepository;
         private readonly ITeamRepository _teamRepository;
         public readonly IUnitOfWork _unitOfWork;
 
-        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork, ITeamRepository teamRepository)
+
+        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork, ITeamRepository teamRepository, ICampusRepository campusRepository)
+
         {
             _studentRepository = studentRepository;
             _unitOfWork = unitOfWork;
             _teamRepository = teamRepository;
+            _campusRepository = campusRepository;
+
         }
 
         public async Task<IEnumerable<Student>> GetAllStudentsByTeamId(int teamId)
         {
             return await _studentRepository.ListByTeamIdAsync(teamId);
+
         }
 
         public async Task<IEnumerable<Student>> ListAsync()
         {
-           return await _studentRepository.ListAsync();
+            return await _studentRepository.ListAsync();
         }
 
 
@@ -47,7 +53,11 @@ namespace Roommates.API.Services
 
         public async Task<StudentResponse> SaveAsync(Student student, int studyCenterId)
         {
-   
+            var existingCampus = await _campusRepository.FindByIdAndStudyCenterId(studyCenterId, student.CampusId);
+            if (existingCampus == null)
+                return new StudentResponse("Study Center or Campus not found");
+
+            student.Campus = existingCampus;
 
             try
             {
@@ -56,7 +66,7 @@ namespace Roommates.API.Services
 
                 return new StudentResponse(student);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StudentResponse($"An error ocurred while saving student: {ex.InnerException}");
             }
@@ -77,7 +87,7 @@ namespace Roommates.API.Services
 
                 return new StudentResponse(existingStudent);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StudentResponse($"An error ocurred while removing student: {ex.Message}");
             }
@@ -91,7 +101,7 @@ namespace Roommates.API.Services
                 return new StudentResponse("Student not found");
 
             existingStudent = UpdatedStudent(student);
-             
+
             try
             {
                 _studentRepository.Update(existingStudent);
@@ -177,7 +187,7 @@ namespace Roommates.API.Services
 
         private Student UpdatedStudent(Student student)
         {
-           
+
             return new Student
             {
                 FirstName = student.FirstName,

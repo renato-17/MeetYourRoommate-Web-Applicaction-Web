@@ -24,6 +24,8 @@ namespace Roommates.API.Persistance.Repositories
             return await _context.Students
                 .Where(s => s.Id == id)
                 .Include(s => s.Team)
+                .Include(s => s.Campus)
+                .ThenInclude(c => c.StudyCenter)
                 .FirstAsync();
 
         }
@@ -32,6 +34,8 @@ namespace Roommates.API.Persistance.Repositories
         {
             return await _context.Students
                 .Include(s => s.Team)
+                .Include(s => s.Campus)
+                .ThenInclude(c => c.StudyCenter)
                 .ToListAsync();
         }
 
@@ -40,6 +44,8 @@ namespace Roommates.API.Persistance.Repositories
             return await _context.Students
                 .Where(s => s.TeamId == teamId)
                 .Include(s => s.Team)
+                .Include(s => s.Campus)
+                .ThenInclude(c => c.StudyCenter)
                 .ToListAsync();
         }
 
