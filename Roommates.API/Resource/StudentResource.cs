@@ -21,5 +21,6 @@ namespace Roommates.API.Resource
         public string Description { get; set; }
         public string Hobbies { get; set; }
         public bool Smoker { get; set; }
+
     }
 }

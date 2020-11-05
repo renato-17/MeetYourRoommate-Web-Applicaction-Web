@@ -20,5 +20,7 @@ namespace Roommates.API.Domain.Models
         public string Password { get; set; }
         public string Mail { get; set; }
 
+        //Relation with Comment
+        public IList<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

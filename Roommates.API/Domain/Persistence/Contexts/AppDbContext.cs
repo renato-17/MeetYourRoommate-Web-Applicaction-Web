@@ -13,7 +13,10 @@ namespace Roommates.API.Domain.Persistence.Contexts
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyDetail> PropertyDetails { get; set; }
         public DbSet<PropertyResource> PropertyResources { get; set; }
-
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Ad> Ads { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<Models.Task> Tasks { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -42,7 +45,11 @@ namespace Roommates.API.Domain.Persistence.Contexts
             builder.Entity<Person>().Property(p => p.Mail).IsRequired().HasMaxLength(60);
             builder.Entity<Person>().Property(p => p.Password).IsRequired();
 
-      
+            builder.Entity<Person>()
+                .HasMany(p => p.Comments)
+                .WithOne(c => c.Person)
+                .HasForeignKey(c => c.PersonId);
+
 
             // Student entity
             builder.Entity<Student>().Property(s => s.Description).HasMaxLength(150);
@@ -88,7 +95,49 @@ namespace Roommates.API.Domain.Persistence.Contexts
             builder.Entity<PropertyResource>().Property(pr => pr.Type).IsRequired().HasMaxLength(50);
             builder.Entity<PropertyResource>().Property(pr => pr.DateUpload).ValueGeneratedOnAdd();
 
+            // Comment entity
+            builder.Entity<Comment>().ToTable("Comments");
+            builder.Entity<Comment>().HasKey(c => c.Id);
+            builder.Entity<Comment>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.Entity<Comment>().Property(c => c.Description).IsRequired().HasMaxLength(150);
+            builder.Entity<Comment>().Property(c => c.DateCreated).ValueGeneratedOnAdd();
+            builder.Entity<Comment>().Property(c => c.DateUpdated).ValueGeneratedOnUpdate();
 
+            // Ad Entity
+            builder.Entity<Ad>().ToTable("Ads");
+            builder.Entity<Ad>().HasKey(a => a.Id);
+            builder.Entity<Ad>().Property(a => a.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.Entity<Ad>().Property(a => a.Title).IsRequired().HasMaxLength(20);
+            builder.Entity<Ad>().Property(a => a.DateStart).ValueGeneratedOnAdd();
+            builder.Entity<Ad>().Property(a => a.DateUpdate).ValueGeneratedOnUpdate();
+
+            builder.Entity<Ad>()
+                .HasMany(a => a.Comments)
+                .WithOne(c => c.Ad)
+                .HasForeignKey(c => c.AdId);
+
+            // Team entity
+            builder.Entity<Team>().ToTable("Teams");
+            builder.Entity<Team>().HasKey(t => t.Id);
+            builder.Entity<Team>().Property(t => t.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.Entity<Team>().Property(t => t.Name).IsRequired().HasMaxLength(50);
+
+            builder.Entity<Team>()
+                .HasMany(t => t.Students)
+                .WithOne(s => s.Team)
+                .HasForeignKey(s => s.TeamId);
+
+            builder.Entity<Team>()
+                .HasMany(t => t.Tasks)
+                .WithOne(t => t.Team)
+                .HasForeignKey(t => t.TeamId).IsRequired();
+
+            // Task Entity
+            builder.Entity<Models.Task>().ToTable("Tasks");
+            builder.Entity<Models.Task>().HasKey(t => t.Id);
+            builder.Entity<Models.Task>().Property(t => t.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.Entity<Models.Task>().Property(t => t.Description).IsRequired().HasMaxLength(50);
+            builder.Entity<Models.Task>().Property(t => t.CreatedDate).ValueGeneratedOnAdd();
         }
     }
 }

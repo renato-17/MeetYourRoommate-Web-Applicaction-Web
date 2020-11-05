@@ -21,13 +21,26 @@ namespace Roommates.API.Persistance.Repositories
         }
         public async Task<Student> FindById(int id)
         {
-            return await _context.Students.FindAsync(id);
-                
+            return await _context.Students
+                .Where(s => s.Id == id)
+                .Include(s => s.Team)
+                .FirstAsync();
+
         }
 
         public async Task<IEnumerable<Student>> ListAsync()
         {
-            return await _context.Students.ToListAsync();
+            return await _context.Students
+                .Include(s => s.Team)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Student>> ListByTeamIdAsync(int teamId)
+        {
+            return await _context.Students
+                .Where(s => s.TeamId == teamId)
+                .Include(s => s.Team)
+                .ToListAsync();
         }
 
         public void Remove(Student student)
@@ -40,6 +53,6 @@ namespace Roommates.API.Persistance.Repositories
             _context.Students.Update(student);
         }
 
-       
+
     }
 }

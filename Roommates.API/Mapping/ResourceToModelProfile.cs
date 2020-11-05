@@ -17,6 +17,10 @@ namespace Roommates.API.Mapping
             CreateMap<SavePropertyResource, Property>();
             CreateMap<SavePropertyDetailResource, PropertyDetail>();
             CreateMap<SavePropertyResourceResource, Domain.Models.PropertyResource>();
+            CreateMap<SaveAdResource, Ad>();
+            CreateMap<SaveCommentResource, Comment>();
+            CreateMap<SaveTeamResource, Team>();
+            CreateMap<SaveTaskResource, Domain.Models.Task>();
         }
     }
 }
