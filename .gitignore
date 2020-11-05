@@ -10,8 +10,6 @@ Roommates.API.Test/bin/
 Roommates.API.Test/obj/
 
 RoommateNUnit/bin/
-<<<<<<< HEAD
 RoommateNUnit/obj/
-=======
-RoommateNUnit/obj/
->>>>>>> a14ab8a02c021e1cd3adc6f682f91d2b843f7b63
+
+
