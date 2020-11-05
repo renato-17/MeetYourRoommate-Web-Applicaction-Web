@@ -43,7 +43,6 @@ namespace Roommates.API
                 options.UseMySQL(Configuration.GetConnectionString("MySQLConnection"));
                 //options.UseInMemoryDatabase("meetyourroommate-api-in-memory");
             });
-           
 
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IStudentService, StudentService>();
@@ -53,6 +52,18 @@ namespace Roommates.API
 
             services.AddScoped<IPropertyRepository, PropertyRepository>();
             services.AddScoped<IPropertyService, PropertyService>();
+
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<ITeamService, TeamService>();
+
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<ITaskService, TaskService>();
+
+            services.AddScoped<IStudyCenterRepository, StudyCenterRepository>();
+            services.AddScoped<IStudyCenterService, StudyCenterService>();
+
+            services.AddScoped<ICampusRepository, CampusRepository>();
+            services.AddScoped<ICampusService, CampusService>();
 
             services.AddScoped<IPropertyDetailRepository, PropertyDetailRepository>();
             services.AddScoped<IPropertyDetailService, PropertyDetailService>();

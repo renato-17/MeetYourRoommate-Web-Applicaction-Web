@@ -18,6 +18,12 @@ namespace Roommates.API.Mapping
             CreateMap<Property, Resource.PropertyResource>();
             CreateMap<PropertyDetail, PropertyDetailResource>();
             CreateMap<Domain.Models.PropertyResource, PropertyResourceResource>();
+            CreateMap<Ad, AdResource>();
+            CreateMap<Comment, CommentResource>();
+            CreateMap<Team, TeamResource>();
+            CreateMap<Domain.Models.Task, TaskResource>();
+            CreateMap<StudyCenter, StudyCenterResource>();
+            CreateMap<Campus, CampusResource>();
         }
     }
 }
