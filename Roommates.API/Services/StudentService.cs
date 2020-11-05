@@ -13,19 +13,27 @@ namespace Roommates.API.Services
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly ICampusRepository _campusRepository;
+        private readonly ITeamRepository _teamRepository;
         public readonly IUnitOfWork _unitOfWork;
 
-        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork)
+        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork, ITeamRepository teamRepository, ICampusRepository campusRepository)
         {
             _studentRepository = studentRepository;
             _unitOfWork = unitOfWork;
+            _teamRepository = teamRepository;
+            _campusRepository = campusRepository;
         }
 
         public async Task<IEnumerable<Student>> ListAsync()
         {
-           return await _studentRepository.ListAsync();
+            return await _studentRepository.ListAsync();
         }
 
+        public async Task<IEnumerable<Student>> GetAllStudentsByTeamId(int teamId)
+        {
+            return await _studentRepository.ListByTeamIdAsync(teamId);
+        }
 
         public async Task<StudentResponse> GetByIdAsync(int id)
         {
@@ -40,7 +48,11 @@ namespace Roommates.API.Services
 
         public async Task<StudentResponse> SaveAsync(Student student, int studyCenterId)
         {
-   
+            var existingCampus = await _campusRepository.FindByIdAndStudyCenterId(studyCenterId, student.CampusId);
+            if (existingCampus == null)
+                return new StudentResponse("Study Center or Campus not found");
+
+            student.Campus = existingCampus;
 
             try
             {
@@ -49,7 +61,7 @@ namespace Roommates.API.Services
 
                 return new StudentResponse(student);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StudentResponse($"An error ocurred while saving student: {ex.InnerException}");
             }
@@ -70,7 +82,7 @@ namespace Roommates.API.Services
 
                 return new StudentResponse(existingStudent);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StudentResponse($"An error ocurred while removing student: {ex.Message}");
             }
@@ -84,7 +96,7 @@ namespace Roommates.API.Services
                 return new StudentResponse("Student not found");
 
             existingStudent = UpdatedStudent(student);
-             
+
             try
             {
                 _studentRepository.Update(existingStudent);
@@ -97,11 +109,79 @@ namespace Roommates.API.Services
                 return new StudentResponse($"An error ocurred while removing student: {ex.Message}");
             }
         }
-      
+        public async Task<StudentResponse> JoinTeam(Team team, int id)
+        {
+            var student = GetByIdAsync(id).Result.Resource;
+
+            if (student.Team != null)
+                return new StudentResponse(student);
+
+            var existingTeam = await _teamRepository.FindByName(team.Name);
+
+            string message;
+
+            if (existingTeam != null)
+            {
+                student.Team = existingTeam;
+                message = "Join the team succesfully";
+            }
+            else
+            {
+                student.Team = team;
+                message = "Join to a new team succesfully";
+            }
+
+            try
+            {
+                _studentRepository.Update(student);
+                await _unitOfWork.CompleteAsync();
+
+                return new StudentResponse(student, message);
+
+            }
+            catch (Exception ex)
+            {
+                return new StudentResponse($"An error ocurred while join a team: {ex.Message}");
+            }
+
+        }
+
+        public async Task<StudentResponse> LeaveTeam(int id)
+        {
+            var existingStudent = await _studentRepository.FindById(id);
+            var team = existingStudent.Team;
+
+            if (existingStudent == null)
+                return new StudentResponse("Student not found");
+
+
+            existingStudent.Team = null;
+            existingStudent.TeamId = null;
+
+
+            var students = _studentRepository.ListByTeamIdAsync(team.Id).Result.ToList();
+
+            try
+            {
+                _studentRepository.Update(existingStudent);
+
+                if (students.Count == 1)
+                    _teamRepository.Remove(team);
+
+                await _unitOfWork.CompleteAsync();
+
+                return new StudentResponse(existingStudent);
+            }
+            catch (Exception ex)
+            {
+                return new StudentResponse($"An error ocurred while leaving a team: {ex.Message}");
+            }
+
+        }
 
         private Student UpdatedStudent(Student student)
         {
-           
+
             return new Student
             {
                 FirstName = student.FirstName,
@@ -117,6 +197,6 @@ namespace Roommates.API.Services
             };
         }
 
-        
+
     }
 }

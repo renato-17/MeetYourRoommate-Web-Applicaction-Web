@@ -13,6 +13,12 @@ namespace Roommates.API.Domain.Models
         public string Hobbies { get; set; }
         public bool Smoker { get; set; }
 
- 
+        // Relation with Team
+        public int? TeamId { get; set; }
+        public Team Team { get; set; }
+
+        //Relation with Campus
+        public int CampusId { get; set; }
+        public Campus Campus { get; set; }
     }
 }

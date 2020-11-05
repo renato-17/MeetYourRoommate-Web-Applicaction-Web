@@ -18,5 +18,8 @@ namespace Roommates.API.Domain.Models
         //Relation with Property Detail
         public PropertyDetail PropertyDetail { get; set; }
 
+        //Relation with Ads
+        public IList<Ad> Ads { get; set; } = new List<Ad>();
+
     }
 }
