@@ -35,6 +35,14 @@ namespace Roommates.API.Controllers
             return resources;
         }
 
+        [HttpGet("teams/{teamId}")]
+        public async Task<IEnumerable<StudentResource>> GetAllByTeamIdAsync(int teamId)
+        {
+            var students = await _studentService.GetAllStudentsByTeamId(teamId);
+            var resources = _mapper.Map<IEnumerable<Student>, IEnumerable<StudentResource>>(students);
+            return resources;
+        }
+
         [HttpGet("{id}")]
         public async Task<StudentResource> GetByStudentId(int id)
         {
@@ -52,7 +60,7 @@ namespace Roommates.API.Controllers
 
             var student = _mapper.Map<SaveStudentResource, Student>(resource);
 
-            var result = await _studentService.SaveAsync(student,resource.StudyCenterId);
+            var result = await _studentService.SaveAsync(student, resource.StudyCenterId);
 
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -62,6 +70,23 @@ namespace Roommates.API.Controllers
             return Ok(studentResource);
         }
 
+        [HttpPost("{id}")]
+        public async Task<IActionResult> JointTeam([FromBody] SaveTeamResource resource, int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetMessages());
+
+            var team = _mapper.Map<SaveTeamResource, Team>(resource);
+
+            var result = await _studentService.JoinTeam(team, id);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studentResource = _mapper.Map<Student, StudentResource>(result.Resource);
+
+            return Ok(studentResource);
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync([FromBody] SaveStudentResource resource, int id)
@@ -78,6 +103,19 @@ namespace Roommates.API.Controllers
         }
 
 
+        [HttpPut("teams/{id}")]
+        public async Task<IActionResult> LeaveTeam(int id)
+        {
+
+            var result = await _studentService.LeaveTeam(id);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studentResource = _mapper.Map<Student, StudentResource>(result.Resource);
+
+            return Ok(studentResource);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
@@ -88,7 +126,7 @@ namespace Roommates.API.Controllers
                 return BadRequest(result.Message);
 
             var studentResource = _mapper.Map<Student, StudentResource>(result.Resource);
-            
+
             return Ok(studentResource);
         }
     }

@@ -13,12 +13,19 @@ namespace Roommates.API.Services
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly ITeamRepository _teamRepository;
         public readonly IUnitOfWork _unitOfWork;
 
-        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork)
+        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork, ITeamRepository teamRepository)
         {
             _studentRepository = studentRepository;
             _unitOfWork = unitOfWork;
+            _teamRepository = teamRepository;
+        }
+
+        public async Task<IEnumerable<Student>> GetAllStudentsByTeamId(int teamId)
+        {
+            return await _studentRepository.ListByTeamIdAsync(teamId);
         }
 
         public async Task<IEnumerable<Student>> ListAsync()
@@ -55,7 +62,7 @@ namespace Roommates.API.Services
             }
 
         }
-
+        
         public async Task<StudentResponse> RemoveAsync(int id)
         {
             var existingStudent = await _studentRepository.FindById(id);
@@ -97,7 +104,76 @@ namespace Roommates.API.Services
                 return new StudentResponse($"An error ocurred while removing student: {ex.Message}");
             }
         }
-      
+
+        public async Task<StudentResponse> JoinTeam(Team team, int id)
+        {
+            var student = GetByIdAsync(id).Result.Resource;
+
+            if (student.Team != null)
+                return new StudentResponse(student);
+
+            var existingTeam = await _teamRepository.FindByName(team.Name);
+
+            string message;
+
+            if (existingTeam != null)
+            {
+                student.Team = existingTeam;
+                message = "Join the team succesfully";
+            }
+            else
+            {
+                student.Team = team;
+                message = "Join to a new team succesfully";
+            }
+
+            try
+            {
+                _studentRepository.Update(student);
+                await _unitOfWork.CompleteAsync();
+
+                return new StudentResponse(student, message);
+
+            }
+            catch (Exception ex)
+            {
+                return new StudentResponse($"An error ocurred while join a team: {ex.Message}");
+            }
+
+        }
+
+        public async Task<StudentResponse> LeaveTeam(int id)
+        {
+            var existingStudent = await _studentRepository.FindById(id);
+            var team = existingStudent.Team;
+
+            if (existingStudent == null)
+                return new StudentResponse("Student not found");
+
+
+            existingStudent.Team = null;
+            existingStudent.TeamId = null;
+
+
+            var students = _studentRepository.ListByTeamIdAsync(team.Id).Result.ToList();
+
+            try
+            {
+                _studentRepository.Update(existingStudent);
+
+                if (students.Count == 1)
+                    _teamRepository.Remove(team);
+
+                await _unitOfWork.CompleteAsync();
+
+                return new StudentResponse(existingStudent);
+            }
+            catch (Exception ex)
+            {
+                return new StudentResponse($"An error ocurred while leaving a team: {ex.Message}");
+            }
+
+        }
 
         private Student UpdatedStudent(Student student)
         {
@@ -117,6 +193,6 @@ namespace Roommates.API.Services
             };
         }
 
-        
+
     }
 }
