@@ -15,7 +15,9 @@ namespace Roommates.API.Mapping
         {
             CreateMap<Student, StudentResource>();
             CreateMap<Lessor, LessorResource>();
-            
+            CreateMap<Property, Resource.PropertyResource>();
+            CreateMap<PropertyDetail, PropertyDetailResource>();
+            CreateMap<Domain.Models.PropertyResource, PropertyResourceResource>();
         }
     }
 }

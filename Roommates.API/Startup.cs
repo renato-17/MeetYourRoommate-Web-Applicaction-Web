@@ -51,6 +51,15 @@ namespace Roommates.API
             services.AddScoped<ILessorRepository, LessorRepository>();
             services.AddScoped<ILessorService, LessorService>();
 
+            services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<IPropertyService, PropertyService>();
+
+            services.AddScoped<IPropertyDetailRepository, PropertyDetailRepository>();
+            services.AddScoped<IPropertyDetailService, PropertyDetailService>();
+
+            services.AddScoped<IPropertyResourceRepository, PropertyResourceRepository>();
+            services.AddScoped<IPropertyResourceService, PropertyResourceService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(Startup));
