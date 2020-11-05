@@ -1,6 +1,8 @@
 .vs/
 Roommates.API/bin/
 Roommates.API/obj/
+Roommates.API/appsettings
+
 TestResults
 
 RoommatesSpecFlow/bin/
