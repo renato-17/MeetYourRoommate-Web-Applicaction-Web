@@ -82,6 +82,12 @@ namespace Roommates.API
             services.AddScoped<IRequestRepository, RequestRepository>();
             services.AddScoped<IRequestService, RequestService>();
 
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IReservationService, ReservationService>();
+
+            services.AddScoped<IReservationDetailRepository, ReservationDetailRepository>();
+            services.AddScoped<IReservationDetailService, ReservationDetailService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(Startup));

@@ -20,6 +20,8 @@ namespace Roommates.API.Domain.Persistence.Contexts
         public DbSet<PropertyDetail> PropertyDetails { get; set; }
         public DbSet<PropertyResource> PropertyResources { get; set; }
         public DbSet<FriendshipRequest> FriendshipRequests { get; set; }
+        public DbSet<ReservationDetail> ReservationDetails { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -71,6 +73,10 @@ namespace Roommates.API.Domain.Persistence.Contexts
             builder.Entity<Student>().Property(s => s.Available).HasDefaultValue(1);
 
 
+            builder.Entity<Student>()
+                .HasMany(s => s.ReservationDetails)
+                .WithOne(rd => rd.Student)
+                .HasForeignKey(rd => rd.StudentId);
 
             //Friendship Request Entity
             builder.Entity<FriendshipRequest>().ToTable("Friendship_Requests");
@@ -134,6 +140,10 @@ namespace Roommates.API.Domain.Persistence.Contexts
                 .HasMany(l => l.Ads)
                 .WithOne(a => a.Lessor)
                 .HasForeignKey(a => a.LessorId);
+            builder.Entity<Lessor>()
+                .HasMany(l => l.ReservationDetails)
+                .WithOne(rd => rd.Lessor)
+                .HasForeignKey(rd => rd.LessorId);
 
             // Ad Entity
             builder.Entity<Ad>().ToTable("Ads");
@@ -162,6 +172,10 @@ namespace Roommates.API.Domain.Persistence.Contexts
                 .HasOne(p => p.PropertyDetail)
                 .WithOne(pd => pd.Property)
                 .HasForeignKey<PropertyDetail>(pd => pd.PropertyId);
+            builder.Entity<Property>()
+                .HasMany(p => p.ReservationDetails)
+                .WithOne(rd => rd.Property)
+                .HasForeignKey(rd => rd.PropertyId);
 
             // Property Detail Entity
             builder.Entity<PropertyDetail>().ToTable("Property_details");
@@ -194,7 +208,24 @@ namespace Roommates.API.Domain.Persistence.Contexts
             builder.Entity<Comment>().Property(c => c.DateUpdated).ValueGeneratedOnUpdate();
 
 
+            // Reservation Detail Entity
+            builder.Entity<ReservationDetail>().ToTable("Reservation_details");
+            builder.Entity<ReservationDetail>().HasKey(rd => rd.Id);
+            builder.Entity<ReservationDetail>().Property(rd => rd.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.Entity<ReservationDetail>().Property(rd => rd.Amount).IsRequired();
+            builder.Entity<ReservationDetail>().Property(rd => rd.Downpayment).IsRequired();
 
+            // Reservation Entity
+            builder.Entity<Reservation>().ToTable("Reservations");
+            builder.Entity<Reservation>().HasKey(r => r.Id);
+            builder.Entity<Reservation>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.Entity<Reservation>().Property(r => r.DateStart).IsRequired();
+            builder.Entity<Reservation>().Property(r => r.DateEnd).IsRequired();
+
+            builder.Entity<Reservation>()
+                .HasMany(r => r.ReservationDetails)
+                .WithOne(rd => rd.Reservation)
+                .HasForeignKey(rd => rd.ReservationId);
 
         }
     }

@@ -65,7 +65,7 @@ namespace Roommates.API.Controllers
             if (!result.Success)
                 return BadRequest(result.Message);
 
-            var studyCenterResource = _mapper.Map<StudyCenter, StudentResource>(result.Resource);
+            var studyCenterResource = _mapper.Map<StudyCenter, StudyCenterResource>(result.Resource);
 
             return Ok(studyCenterResource);
         }

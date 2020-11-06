@@ -23,5 +23,13 @@ namespace Roommates.API.Domain.Models
         public Campus Campus { get; set; }
 
 
+<<<<<<< HEAD
+=======
+        //Relation with Friend Request Received
+        public IList<FriendshipRequest> FriendshipRequestsReceived { get; set; } = new List<FriendshipRequest>();
+
+        //Relation with Reservation Detail
+        public IList<ReservationDetail> ReservationDetails { get; set; } = new List<ReservationDetail>();
+>>>>>>> feature/reservations
     }
 }

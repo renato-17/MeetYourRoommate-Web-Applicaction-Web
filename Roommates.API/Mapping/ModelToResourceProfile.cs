@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using Roommates.API.Domain;
 using Roommates.API.Domain.Models;
 using Roommates.API.Resource;
 using System;
@@ -25,6 +26,8 @@ namespace Roommates.API.Mapping
             CreateMap<StudyCenter, StudyCenterResource>();
             CreateMap<Campus, CampusResource>();
             CreateMap<FriendshipRequest, FriendshipRequestResource>();
+            CreateMap<Reservation, ReservationResource>();
+            CreateMap<ReservationDetail, ReservationDetailResource>();
         }
     }
 }

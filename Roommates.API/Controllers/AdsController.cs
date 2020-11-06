@@ -42,5 +42,7 @@ namespace Roommates.API.Controllers
             var resource = _mapper.Map<Ad, AdResource>(ad.Resource);
             return resource;
         }
+
+
     }
 }

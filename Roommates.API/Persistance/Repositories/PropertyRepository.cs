@@ -58,5 +58,13 @@ namespace Roommates.API.Persistance.Repositories
         {
             _context.Properties.Update(property);
         }
+
+        public async Task<Property> FindById(int id)
+        {
+            return await _context.Properties
+                .Where(p => p.Id == id)
+                .Include(p => p.Lessor)
+                .FirstAsync();
+        }
     }
 }
