@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace Roommates.API.Persistance.Repositories
 {
-    public class FriendshipRequestRepository : BaseRepository, IFriendshipRequestRepository
+    public class RequestRepository : BaseRepository, IRequestRepository
     {
-        public FriendshipRequestRepository(AppDbContext context) : base(context)
+        public RequestRepository(AppDbContext context) : base(context)
         {
         }
-        public  async Task<FriendshipRequest> FindByStudentOneIdAndStudentTwoId(int studentOneId, int studentTwoId)
+        public  async Task<FriendshipRequest> FindByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId)
         {
-            return await _context.FriendshipRequests.FindAsync(studentOneId, studentTwoId);
+            return await _context.FriendshipRequests.FindAsync(personOneId, personTwoId);
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> ListByStudentOneIdAsync(int studentOneId)
+        public async Task<IEnumerable<FriendshipRequest>> ListByPersonOneIdAsync(int personOneId)
         {
             return await _context.FriendshipRequests
-                .Where(fs => fs.StudentOneId == studentOneId)
+                .Where(fs => fs.PersonOneId == personOneId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> ListByStudentTwoIdAsync(int studentTwoId)
+        public async Task<IEnumerable<FriendshipRequest>> ListByPersonTwoIdAsync(int personTwoId)
         {
             return await _context.FriendshipRequests
-                .Where(fs => fs.StudentTwoId == studentTwoId)
+                .Where(fs => fs.PersonTwoId == personTwoId)
                 .ToListAsync();
         }
 

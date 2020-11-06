@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Roommates.API.Domain.Repositories
 {
-    public interface IFriendshipRequestRepository
+    public interface IRequestRepository
     {
-        public Task<FriendshipRequest> FindByStudentOneIdAndStudentTwoId(int studentOneId, int studentTwoId);
-        public Task<IEnumerable<FriendshipRequest>> ListByStudentOneIdAsync(int studentOneId);
-        public Task<IEnumerable<FriendshipRequest>> ListByStudentTwoIdAsync(int studentTwoId);
+        public Task<FriendshipRequest> FindByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId);
+        public Task<IEnumerable<FriendshipRequest>> ListByPersonOneIdAsync(int personOneId);
+        public Task<IEnumerable<FriendshipRequest>> ListByPersonTwoIdAsync(int personTwoId);
         public System.Threading.Tasks.Task AddAsync(FriendshipRequest friendshipRequest);
         public void Remove(FriendshipRequest friendshipRequest);
         public void Update(FriendshipRequest friendshipRequest);

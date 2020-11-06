@@ -18,10 +18,10 @@ namespace Roommates.API.Controllers
     [ApiController]
     public class StudentFriendshipRequestsController : ControllerBase
     {
-        private readonly IFriendshipRequestService _friendshipRequestService;
+        private readonly IRequestService _friendshipRequestService;
         private readonly IMapper _mapper;
 
-        public StudentFriendshipRequestsController(IFriendshipRequestService friendshipRequestService, IMapper mapper)
+        public StudentFriendshipRequestsController(IRequestService friendshipRequestService, IMapper mapper)
         {
             _friendshipRequestService = friendshipRequestService;
             _mapper = mapper;
@@ -49,9 +49,9 @@ namespace Roommates.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetMessages());
 
-            var result = await _friendshipRequestService.AddAsync(studentId, studentTwoId);
+            var result = await _friendshipRequestService.AddTeamRequestAsync(studentId, studentTwoId);
 
-            var friendshipRequest = await _friendshipRequestService.GetByStudentOneIdAndStudentTwoId(studentId, studentTwoId);
+            var friendshipRequest = await _friendshipRequestService.GetByPersonOneIdAndPersonTwoId(studentId, studentTwoId);
 
             if (!result.Success)
                 return BadRequest(result.Message);

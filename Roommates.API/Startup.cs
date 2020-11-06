@@ -79,8 +79,8 @@ namespace Roommates.API
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICommentService, CommentService>();
 
-            services.AddScoped<IFriendshipRequestRepository, FriendshipRequestRepository>();
-            services.AddScoped<IFriendshipRequestService, FriendshipRequestService>();
+            services.AddScoped<IRequestRepository, RequestRepository>();
+            services.AddScoped<IRequestService, RequestService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

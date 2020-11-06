@@ -7,8 +7,9 @@ namespace Roommates.API.Resource
 {
     public class FriendshipRequestResource
     {
-        public int StudentOneId { get; set; }
-        public int StudentTwoId { get; set; }
+        public int PersonOneId { get; set; }
+        public int PersonTwoId { get; set; }
         public string StatusDetail { get; set; }
+        public string Type { get; set; }
     }
 }

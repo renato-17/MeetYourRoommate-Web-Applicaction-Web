@@ -8,14 +8,15 @@ namespace Roommates.API.Domain.Models
     public class FriendshipRequest 
     {
         public int Status { get; set; }
-        public String StatusDetail { get; set; }
+        public string StatusDetail { get; set; }
+        public string Type { get; set; } 
 
         //Relation with the first Student
-        public int StudentOneId { get; set; }
-        public Student StudentOne { get; set; }
+        public int PersonOneId { get; set; }
+        public Person PersonOne { get; set; }
 
         //Relation with the second Student
-        public int StudentTwoId { get; set; }
-        public Student StudentTwo { get; set; }
+        public int PersonTwoId { get; set; }
+        public Person PersonTwo { get; set; }
     }
 }

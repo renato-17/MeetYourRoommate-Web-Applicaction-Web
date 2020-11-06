@@ -22,10 +22,6 @@ namespace Roommates.API.Domain.Models
         public int CampusId { get; set; }
         public Campus Campus { get; set; }
 
-        //Relation with Friend Requests Sent
-        public IList<FriendshipRequest> FriendshipRequestsSent { get; set; } = new List<FriendshipRequest>();
 
-        //Relation with Friend Request Received
-        public IList<FriendshipRequest> FriendshipRequestsReceived { get; set; } = new List<FriendshipRequest>();
     }
 }

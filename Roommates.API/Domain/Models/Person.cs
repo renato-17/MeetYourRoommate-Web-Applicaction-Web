@@ -22,5 +22,11 @@ namespace Roommates.API.Domain.Models
 
         //Relation with Comment
         public IList<Comment> Comments { get; set; } = new List<Comment>();
+
+        //Relation with Friend Requests Sent
+        public IList<FriendshipRequest> FriendshipRequestsSent { get; set; } = new List<FriendshipRequest>();
+
+        //Relation with Friend Request Received
+        public IList<FriendshipRequest> FriendshipRequestsReceived { get; set; } = new List<FriendshipRequest>();
     }
 }

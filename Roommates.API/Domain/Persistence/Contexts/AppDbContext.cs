@@ -53,26 +53,28 @@ namespace Roommates.API.Domain.Persistence.Contexts
                 .WithOne(c => c.Person)
                 .HasForeignKey(c => c.PersonId);
 
+
+            builder.Entity<Person>()
+                .HasMany(s => s.FriendshipRequestsSent)
+                .WithOne(fs => fs.PersonOne)
+                .HasForeignKey(fs => fs.PersonOneId);
+
+            builder.Entity<Person>()
+                .HasMany(s => s.FriendshipRequestsReceived)
+                .WithOne(fs => fs.PersonTwo)
+                .HasForeignKey(fs => fs.PersonTwoId);
+
             // Student entity
             builder.Entity<Student>().Property(s => s.Description).HasMaxLength(150);
             builder.Entity<Student>().Property(s => s.Hobbies).HasMaxLength(150);
             builder.Entity<Student>().Property(s => s.Smoker);
             builder.Entity<Student>().Property(s => s.Available).HasDefaultValue(1);
-            
-            builder.Entity<Student>()
-                .HasMany(s => s.FriendshipRequestsSent)
-                .WithOne(fs => fs.StudentOne)
-                .HasForeignKey(fs => fs.StudentOneId);
 
-            builder.Entity<Student>()
-                .HasMany(s => s.FriendshipRequestsReceived)
-                .WithOne(fs => fs.StudentTwo)
-                .HasForeignKey(fs => fs.StudentTwoId);
 
 
             //Friendship Request Entity
             builder.Entity<FriendshipRequest>().ToTable("Friendship_Requests");
-            builder.Entity<FriendshipRequest>().HasKey(fs => new { fs.StudentOneId, fs.StudentTwoId });
+            builder.Entity<FriendshipRequest>().HasKey(fs => new { fs.PersonOneId, fs.PersonTwoId });
             builder.Entity<FriendshipRequest>().Property(fs => fs.Status).HasDefaultValue(0);
 
             // Team entity
