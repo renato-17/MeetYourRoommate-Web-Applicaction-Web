@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Roommates.API.Domain.Services.Communication
 {
-    public class FriendshipRequestResponse : BaseResponse<FriendshipRequest>
+    public class FriendshipRequestResponse : BaseResponse<Request>
     {
-        public FriendshipRequestResponse(FriendshipRequest resource) : base(resource)
+        public FriendshipRequestResponse(Request resource) : base(resource)
         {
         }
 
@@ -16,7 +16,7 @@ namespace Roommates.API.Domain.Services.Communication
         {
         }
 
-        public FriendshipRequestResponse(FriendshipRequest resource, string message) : base(resource, message)
+        public FriendshipRequestResponse(Request resource, string message) : base(resource, message)
         {
         }
     }

@@ -10,6 +10,7 @@ using Roommates.API.Domain.Services;
 using Roommates.API.Domain.Services.Communication;
 using Roommates.API.Extensions;
 using Roommates.API.Resource;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Roommates.API.Controllers
 {
@@ -26,6 +27,13 @@ namespace Roommates.API.Controllers
             _lessorService = lessorService;
             _mapper = mapper;
         }
+
+        [SwaggerOperation(
+            Summary = "List all properties",
+            Description = "List all properties",
+            OperationId = "ListAllProperties",
+            Tags = new[] { "lessors" }
+            )]
         [HttpGet]
         public async Task<IEnumerable<LessorResource>> GetAllAsync()
         {
@@ -33,6 +41,13 @@ namespace Roommates.API.Controllers
             var resources = _mapper.Map<IEnumerable<Lessor>, IEnumerable<LessorResource>>(lessors);
             return resources;
         }
+
+        [SwaggerOperation(
+            Summary = "Get a Lessor",
+            Description = "Get an specific lessor by id",
+            OperationId = "GetLessorById",
+            Tags = new[] { "lessors" }
+            )]
         [HttpGet("{id}")]
         public async Task<LessorResource> GetByLessortId(int id)
         {
@@ -41,8 +56,14 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+            Summary = "Create a lessor",
+            Description = "Create a new Lessor",
+            OperationId = "CreateLessor",
+            Tags = new[] { "lessors" }
+            )]
         [HttpPost]
-        public async Task<IActionResult> PostAsync(SaveLessorResource resource)
+        public async Task<IActionResult> PostAsync([FromBody]SaveLessorResource resource)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState.GetMessages());
@@ -59,6 +80,12 @@ namespace Roommates.API.Controllers
             return Ok(lessorResource);
         }
 
+        [SwaggerOperation(
+           Summary = "Delete a Lessor",
+           Description = "Delete an specific Lessor",
+           OperationId = "DeleteLessor",
+           Tags = new[] { "lessors" }
+           )]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

@@ -30,7 +30,7 @@ namespace Roommates.API.Controllers
             Summary = "List properties by lessor",
             Description = "List of Properties for an specific Lessor",
             OperationId = "ListProperyByLessor",
-            Tags = new[] { "Lessors" }
+            Tags = new[] { "properties" }
             )]
         [HttpGet]
         public async Task<IEnumerable<Resource.PropertyResource>> GetAllByLessorIdAsync(int lessorId)
@@ -40,6 +40,12 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+           Summary = "Get property by its id an lessor",
+           Description = "Get an specifi property by its id and Lessor id",
+           OperationId = "GetPropertyByIdAndLessorId",
+           Tags = new[] { "properties" }
+           )]
         [HttpGet("{id}")]
         public async Task<Resource.PropertyResource> GetByPropertyIdAndLessorId(int id, int lessorId)
         {
@@ -48,8 +54,14 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+           Summary = "Create a property",
+           Description = "Create a new property",
+           OperationId = "CreateProperty",
+           Tags = new[] { "properties" }
+           )]
         [HttpPost]
-        public async Task<IActionResult> PostAsync(SavePropertyResource resource, int lessorId)
+        public async Task<IActionResult> PostAsync([FromBody]SavePropertyResource resource, int lessorId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetMessages());
@@ -66,7 +78,30 @@ namespace Roommates.API.Controllers
             return Ok(propertyResource);
         }
 
+        [SwaggerOperation(
+         Summary = "Update Property",
+         Description = "Update an specific Property",
+         OperationId = "UpdateProperty",
+         Tags = new[] { "properties" }
+         )]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromBody] SavePropertyResource resource, int id, int lessorId)
+        {
+            var property = _mapper.Map<SavePropertyResource, Property>(resource);
 
+            var result = await _propertyService.UpdateAsync(lessorId, id, property);
+            if (!result.Success)
+                return BadRequest(result.Message);
+            var propertyResource = _mapper.Map<Property, Resource.PropertyResource>(result.Resource);
+            return Ok(propertyResource);
+        }
+
+        [SwaggerOperation(
+           Summary = "Delete Property",
+           Description = "Delete an specific Property",
+           OperationId = "DeleteProperty",
+           Tags = new[] { "properties" }
+           )]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id, int lessorId)
         {
@@ -76,5 +111,7 @@ namespace Roommates.API.Controllers
             var propertyResource = _mapper.Map<Property, Resource.PropertyResource>(result.Resource);
             return Ok(propertyResource);
         }
+
+        
     }
 }

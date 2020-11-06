@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Roommates.API.Domain.Services;
 using Roommates.API.Extensions;
 using Roommates.API.Resource;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Roommates.API.Controllers
 {
@@ -25,6 +26,11 @@ namespace Roommates.API.Controllers
             _mapper = mapper;
         }
 
+        [SwaggerOperation(
+            Summary = "Get all property resources",
+            Description = "Get all property resources",
+            OperationId = "GetAllPropertyResource",
+            Tags = new[] { "property_resources" })]
         [HttpGet]
         public async Task<IEnumerable<PropertyResourceResource>> GetAllAsync(int lessorId, int propertyId)
         {
@@ -33,6 +39,11 @@ namespace Roommates.API.Controllers
             return resources;
         }
 
+        [SwaggerOperation(
+            Summary = "Create property resource",
+            Description = "Create a new property resource of an specific property",
+            OperationId = "CreatePropertyResource",
+            Tags = new[] { "property_resources" })]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SavePropertyResourceResource resource, int lessorId, int propertyId)
         {

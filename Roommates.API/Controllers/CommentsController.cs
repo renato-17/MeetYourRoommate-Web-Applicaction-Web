@@ -25,6 +25,13 @@ namespace Roommates.API.Controllers
             _commentService = commentService;
             _mapper = mapper;
         }
+
+        [SwaggerOperation(
+            Summary = "Get all comments",
+            Description = "Get all comments",
+            OperationId = "GetAllComments",
+            Tags = new[] { "comments" }
+            )]
         [HttpGet]
         public async Task<IEnumerable<CommentResource>> GetAllAsync()
         {
@@ -34,10 +41,10 @@ namespace Roommates.API.Controllers
         }
 
         [SwaggerOperation(
-           Summary = "comment by id",
-           Description = "comment for an specific id",
+           Summary = "Get comment by id",
+           Description = "Get an specific comment by its id",
            OperationId = "CommentById",
-           Tags = new[] { "Comments" }
+           Tags = new[] { "comments" }
            )]
         [HttpGet("{commentId}")]
         public async Task<CommentResource> GetByIdAsync(int commentId)

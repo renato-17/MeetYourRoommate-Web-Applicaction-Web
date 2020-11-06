@@ -26,6 +26,13 @@ namespace Roommates.API.Controllers
             _adService = adService;
             _mapper = mapper;
         }
+
+        [SwaggerOperation(
+            Summary = "Get all ads",
+            Description = "Get all ads",
+            OperationId = "GetAllAds",
+            Tags = new[] { "ads" }
+            )]
         [HttpGet]
         public async Task<IEnumerable<AdResource>> GetAllAsync()
         {
@@ -34,7 +41,12 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
-
+        [SwaggerOperation(
+            Summary = "Get ad by Id",
+            Description = "Get an specific Ad by its Id",
+            OperationId = "GetAdById",
+            Tags = new[] { "ads" }
+            )]
         [HttpGet("{adId}")]
         public async Task<AdResource> GetByIdAsync(int adId)
         {

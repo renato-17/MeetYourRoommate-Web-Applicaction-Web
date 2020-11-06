@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Roommates.API.Domain.Models;
+using Roommates.API.Extensions;
 using System.IO;
 
 namespace Roommates.API.Domain.Persistence.Contexts
@@ -19,7 +20,7 @@ namespace Roommates.API.Domain.Persistence.Contexts
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyDetail> PropertyDetails { get; set; }
         public DbSet<PropertyResource> PropertyResources { get; set; }
-        public DbSet<FriendshipRequest> FriendshipRequests { get; set; }
+        public DbSet<Request> Request { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -73,9 +74,9 @@ namespace Roommates.API.Domain.Persistence.Contexts
 
 
             //Friendship Request Entity
-            builder.Entity<FriendshipRequest>().ToTable("Friendship_Requests");
-            builder.Entity<FriendshipRequest>().HasKey(fs => new { fs.PersonOneId, fs.PersonTwoId });
-            builder.Entity<FriendshipRequest>().Property(fs => fs.Status).HasDefaultValue(0);
+            builder.Entity<Request>().ToTable("Requests");
+            builder.Entity<Request>().HasKey(fs => new { fs.PersonOneId, fs.PersonTwoId });
+            builder.Entity<Request>().Property(fs => fs.Status).HasDefaultValue(0);
 
             // Team entity
             builder.Entity<Team>().ToTable("Teams");
@@ -101,7 +102,7 @@ namespace Roommates.API.Domain.Persistence.Contexts
             builder.Entity<Models.Task>().Property(t => t.CreatedDate).ValueGeneratedOnAdd();
 
             // Study Center Entity
-            builder.Entity<StudyCenter>().ToTable("Study_Centers");
+            builder.Entity<StudyCenter>().ToTable("StudyCenters");
             builder.Entity<StudyCenter>().HasKey(s => s.Id);
             builder.Entity<StudyCenter>().Property(s => s.Id).IsRequired().ValueGeneratedOnAdd();
             builder.Entity<StudyCenter>().Property(s => s.Name).IsRequired().HasMaxLength(25);
@@ -164,7 +165,7 @@ namespace Roommates.API.Domain.Persistence.Contexts
                 .HasForeignKey<PropertyDetail>(pd => pd.PropertyId);
 
             // Property Detail Entity
-            builder.Entity<PropertyDetail>().ToTable("Property_details");
+            builder.Entity<PropertyDetail>().ToTable("PropertyDetails");
             builder.Entity<PropertyDetail>().HasKey(pd => pd.Id);
             builder.Entity<PropertyDetail>().Property(pd => pd.Id).IsRequired().ValueGeneratedOnAdd();
             builder.Entity<PropertyDetail>().Property(pd => pd.Rooms).IsRequired();
@@ -180,7 +181,7 @@ namespace Roommates.API.Domain.Persistence.Contexts
                 .HasForeignKey(pr => pr.PropertyDetailId);
 
             // Property Resource Entity
-            builder.Entity<PropertyResource>().ToTable("Property_resources");
+            builder.Entity<PropertyResource>().ToTable("PropertyResources");
             builder.Entity<PropertyResource>().HasKey(pr => pr.Id);
             builder.Entity<PropertyResource>().Property(pr => pr.Type).IsRequired().HasMaxLength(50);
             builder.Entity<PropertyResource>().Property(pr => pr.DateUpload).ValueGeneratedOnAdd();
@@ -194,7 +195,8 @@ namespace Roommates.API.Domain.Persistence.Contexts
             builder.Entity<Comment>().Property(c => c.DateUpdated).ValueGeneratedOnUpdate();
 
 
-
+            //Naming conventions
+            builder.ApplySnakeCaseNamingConvention();
 
         }
     }

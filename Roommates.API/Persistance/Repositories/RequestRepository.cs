@@ -14,36 +14,36 @@ namespace Roommates.API.Persistance.Repositories
         public RequestRepository(AppDbContext context) : base(context)
         {
         }
-        public  async Task<FriendshipRequest> FindByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId)
+        public  async Task<Request> FindByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId)
         {
-            return await _context.FriendshipRequests.FindAsync(personOneId, personTwoId);
+            return await _context.Request.FindAsync(personOneId, personTwoId);
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> ListByPersonOneIdAsync(int personOneId)
+        public async Task<IEnumerable<Request>> ListByPersonOneIdAsync(int personOneId)
         {
-            return await _context.FriendshipRequests
+            return await _context.Request
                 .Where(fs => fs.PersonOneId == personOneId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> ListByPersonTwoIdAsync(int personTwoId)
+        public async Task<IEnumerable<Request>> ListByPersonTwoIdAsync(int personTwoId)
         {
-            return await _context.FriendshipRequests
+            return await _context.Request
                 .Where(fs => fs.PersonTwoId == personTwoId)
                 .ToListAsync();
         }
 
-        public async System.Threading.Tasks.Task AddAsync(FriendshipRequest friendshipRequest)
+        public async System.Threading.Tasks.Task AddAsync(Request friendshipRequest)
         {
             await _context.AddAsync(friendshipRequest);
         }
 
-        public void Update(FriendshipRequest friendshipRequest)
+        public void Update(Request friendshipRequest)
         {
             _context.Update(friendshipRequest);
         }
 
-        public void Remove(FriendshipRequest friendshipRequest)
+        public void Remove(Request friendshipRequest)
         {
             _context.Remove(friendshipRequest);
         }

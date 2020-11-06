@@ -40,7 +40,7 @@ namespace Roommates.API.Services
             if (!studentTwo.Available)
                 return new FriendshipRequestResponse("The student you want to send a friend request to, have roommate ");
 
-            var newFriendshipRequest = new FriendshipRequest
+            var newFriendshipRequest = new Request
             {
                 PersonOneId = studentOne.Id,
                 PersonOne = studentOne,
@@ -64,7 +64,7 @@ namespace Roommates.API.Services
             }
         }
 
-        public async Task<FriendshipRequestResponse> AddLessorRequestAsync(int personOneId, int personTwoId)
+        public async Task<FriendshipRequestResponse> AddLeaseRequestAsync(int personOneId, int personTwoId)
         {
             if (personOneId == personTwoId)
                 return new FriendshipRequestResponse("You can not send a friend request to yourself");
@@ -75,7 +75,7 @@ namespace Roommates.API.Services
             
             var student = await _studentRepository.FindById(personOneId);
 
-            var newFriendshipRequest = new FriendshipRequest
+            var newFriendshipRequest = new Request
             {
                 PersonOneId = student.Id,
                 PersonOne = student,
@@ -143,12 +143,12 @@ namespace Roommates.API.Services
             return new FriendshipRequestResponse(existingFriendshipRequest);
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestReceive(int personTwoId)
+        public async Task<IEnumerable<Request>> GetReceivedRequests(int personTwoId)
         {
             return await _friendshipRequestRepository.ListByPersonTwoIdAsync(personTwoId);
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestSent(int personOneId)
+        public async Task<IEnumerable<Request>> GetSentRequests(int personOneId)
         {
             return await _friendshipRequestRepository.ListByPersonOneIdAsync(personOneId);
         }

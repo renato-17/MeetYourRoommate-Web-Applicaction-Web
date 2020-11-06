@@ -4,6 +4,7 @@ using Roommates.API.Domain.Models;
 using Roommates.API.Domain.Services;
 using Roommates.API.Extensions;
 using Roommates.API.Resource;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,12 @@ namespace Roommates.API.Controllers
             _mapper = mapper;
         }
 
+        [SwaggerOperation(
+           Summary = "Get all study centers",
+           Description = "Get all study centers",
+           OperationId = "GetAllStudyCenters",
+           Tags = new[] { "study_centers" }
+           )]
         [HttpGet]
         public async Task<IEnumerable<StudyCenterResource>> GetAllAsync()
         {
@@ -33,6 +40,12 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+           Summary = "Get study center",
+           Description = "Get an specific study center",
+           OperationId = "GetStudyCenterById",
+           Tags = new[] { "study_centers" }
+           )]
         [HttpGet("{id}")]
         public async Task<StudyCenterResource> GetByStudyCenterId(int id)
         {
@@ -41,6 +54,12 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+           Summary = "Create study center",
+           Description = "Create a new study center",
+           OperationId = "CreateStudyCenter",
+           Tags = new[] { "study_centers" }
+           )]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveStudyCenterResource resource)
         {
@@ -57,6 +76,12 @@ namespace Roommates.API.Controllers
             return Ok(studyCenterResource);
         }
 
+        [SwaggerOperation(
+           Summary = "Delete study center",
+           Description = "Delete an specific study center",
+           OperationId = "DeleteStudyCenter",
+           Tags = new[] { "study_centers" }
+           )]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

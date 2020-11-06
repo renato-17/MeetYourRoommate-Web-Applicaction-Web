@@ -160,6 +160,8 @@ namespace Roommates.API.Services
             if (existingStudent == null)
                 return new StudentResponse("Student not found");
 
+            if (existingStudent.Team == null)
+                return new StudentResponse("Student does not have team");
 
             existingStudent.Team = null;
             existingStudent.TeamId = null;

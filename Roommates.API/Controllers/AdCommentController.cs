@@ -26,11 +26,12 @@ namespace Roommates.API.Controllers
             _commentService = commentService;
             _mapper = mapper;
         }
+
         [SwaggerOperation(
             Summary = "List comments by ad",
-            Description = "List of comments for an specific Ad",
+            Description = "List of comments by an specific Ad",
             OperationId = "ListCommentByAd",
-            Tags = new[] { "Ads" }
+            Tags = new[] { "ads" }
             )]
         [HttpGet]
         public async Task<IEnumerable<CommentResource>> GetAllByAdIdAsync(int adId)
@@ -44,7 +45,7 @@ namespace Roommates.API.Controllers
            Summary = "Create  a comment",
            Description = "Create a new comment",
            OperationId = "CreateComment",
-           Tags = new[] { "Comments" }
+           Tags = new[] { "comments" }
            )]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveCommentResource resource, int adId)

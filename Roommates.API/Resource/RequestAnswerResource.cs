@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Roommates.API.Resource
 {
-    public class FriendshipAnswerResource
+    public class RequestAnswerResource
     {
         [Required]
         public int Answer { get; set; }
