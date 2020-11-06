@@ -9,6 +9,7 @@ namespace Roommates.API.Domain.Repositories
     public interface IPropertyRepository
     {
         Task<IEnumerable<Property>> ListAsync();
+        Task<Property> FindById(int id);
         Task<IEnumerable<Property>> ListByLessorIdAsync(int lessorId);
         System.Threading.Tasks.Task AddAsync(Property property);
         Task<Property> FindByIdAndLessorId(int lessorId, int id);
