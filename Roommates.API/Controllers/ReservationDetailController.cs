@@ -9,6 +9,7 @@ using Roommates.API.Domain.Models;
 using Roommates.API.Domain.Services;
 using Roommates.API.Extensions;
 using Roommates.API.Resource;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Roommates.API.Controllers
 {
@@ -26,6 +27,12 @@ namespace Roommates.API.Controllers
             _mapper = mapper;
         }
 
+        [SwaggerOperation(
+           Summary = "Get all Reservation Details by Reservation",
+           Description = "Get all Reservation Details by an specific Reservation",
+           OperationId = "GetAllReservationDetailsByReservationId",
+           Tags = new[] { "reservation_details" }
+           )]
         [HttpGet]
         public async Task<IEnumerable<Resource.ReservationDetailResource>> GetAllByReservationIdAsync(int reservationId)
         {
@@ -34,6 +41,12 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+           Summary = "Get Reservation Details by Id and Reservation",
+           Description = "Get Reservation Details by its id and Reservation",
+           OperationId = "GetReservationDetailsByIdAndReservationId",
+           Tags = new[] { "reservation_details" }
+           )]
         [HttpGet("{id}")]
         public async Task<Resource.ReservationDetailResource> GetByReservationDetailIdAndReservationId(int id, int reservationId)
         {
@@ -42,6 +55,12 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+            Summary = "Create Reservation Details",
+            Description = "Create a new Reservation Details",
+            OperationId = "CreateReservationDetail",
+            Tags = new[] { "reservation_details" }
+            )]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveReservationDetailResource resource, int reservationId)
         {
@@ -60,7 +79,31 @@ namespace Roommates.API.Controllers
             return Ok(reservationDetailResource);
         }
 
+        [SwaggerOperation(
+            Summary = "Update Reservation Details",
+            Description = "Update an specific Reservation Details",
+            OperationId = "UpdateReservationDetail",
+            Tags = new[] { "reservation_details" }
+            )]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromBody] SaveReservationDetailResource resource,int id, int reservationId)
+        {
+            var reservationDetail = _mapper.Map<SaveReservationDetailResource, ReservationDetail>(resource);
 
+            var result = await _reservationDetailService.UpdateAsync(reservationDetail,id, reservationId);
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var reservationDetailResource = _mapper.Map<ReservationDetail, Resource.ReservationDetailResource>(result.Resource);
+            return Ok(reservationDetailResource);
+        }
+
+        [SwaggerOperation(
+            Summary = "Delete Reservation Details",
+            Description = "Delete an specific Reservation Details",
+            OperationId = "DeleteReservationDetail",
+            Tags = new[] { "reservation_details" }
+            )]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id, int reservationId)
         {

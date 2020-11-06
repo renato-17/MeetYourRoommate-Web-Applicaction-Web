@@ -5,7 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Roommates.API.Domain.Models;
 using Roommates.API.Domain.Services;
-
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Roommates.API.Controllers
 {
@@ -22,6 +22,13 @@ namespace Roommates.API.Controllers
             _propertyService = propertyService;
             _mapper = mapper;
         }
+
+        [SwaggerOperation(
+           Summary = "Get all properties",
+           Description = "Get all properties",
+           OperationId = "GetAllProperties",
+           Tags = new[] { "properties" }
+           )]
         [HttpGet]
         public async Task<IEnumerable<Resource.PropertyResource>> GetAllAsync()
         {

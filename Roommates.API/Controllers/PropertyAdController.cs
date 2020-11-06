@@ -26,11 +26,12 @@ namespace Roommates.API.Controllers
             _adService = adService;
             _mapper = mapper;
         }
+
         [SwaggerOperation(
            Summary = "List ads by property",
            Description = "List of ads for an specific property",
            OperationId = "ListAdByProperty",
-           Tags = new[] { "Properties" }
+           Tags = new[] { "ads" }
            )]
         [HttpGet]
         public async Task<IEnumerable<AdResource>> GetAllByLessorIdAndPropertyIdAsync(int lessorId, int propertyId)
@@ -42,10 +43,10 @@ namespace Roommates.API.Controllers
         }
         
         [SwaggerOperation(
-           Summary = "New ad",
+           Summary = "Create Ad",
            Description = "Create a new Ad",
            OperationId = "CreateAd",
-           Tags = new[] { "Ads" }
+           Tags = new[] { "ads" }
            )]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveAdResource resource, int lessorId, int propertyId)
@@ -59,6 +60,44 @@ namespace Roommates.API.Controllers
             var adResource = _mapper.Map<Ad, AdResource>(ad);
             return Ok(adResource);
         }
-       
+
+        [SwaggerOperation(
+            Summary = "Update Ad",
+            Description = "Update an specific Ad",
+            OperationId = "CreateAd",
+            Tags = new[] { "ads" }
+            )]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAsync([FromBody] SaveAdResource resource, int id, int lessorId, int propertyId)
+        {
+            var ad = _mapper.Map<SaveAdResource, Ad>(resource);
+            var result = await _adService.UpdateAsync(ad, id,lessorId,propertyId);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studentResource = _mapper.Map<Ad, AdResource>(result.Resource);
+
+            return Ok(studentResource);
+        }
+
+        [SwaggerOperation(
+            Summary = "Delete ad",
+            Description = "Delete an specific ad",
+            OperationId = "DeleteAd",
+            Tags = new[] { "ads" }
+            )]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id, int lessorId, int propertyId)
+        {
+            var result = await _adService.DeleteAsync(id, lessorId,propertyId);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studyCenterResource = _mapper.Map<Ad, AdResource>(result.Resource);
+
+            return Ok(studyCenterResource);
+        }
     }
 }

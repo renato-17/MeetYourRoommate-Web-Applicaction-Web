@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Roommates.API.Domain.Models
 {
-    public class FriendshipRequest 
+    public class Request 
     {
         public int Status { get; set; }
         public string StatusDetail { get; set; }

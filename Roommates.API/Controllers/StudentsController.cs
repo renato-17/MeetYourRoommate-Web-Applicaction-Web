@@ -7,6 +7,7 @@ using Roommates.API.Domain.Models;
 using Roommates.API.Extensions;
 using Roommates.API.Resource;
 using Roommates.API.Domain.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,6 +28,12 @@ namespace Roommates.API.Controllers
             _mapper = mapper;
         }
 
+        [SwaggerOperation(
+           Summary = "Get all students",
+           Description = "Get all students",
+           OperationId = "GetAllStudents",
+           Tags = new[] { "students" }
+           )]
         [HttpGet]
         public async Task<IEnumerable<StudentResource>> GetAllAsync()
         {
@@ -35,6 +42,12 @@ namespace Roommates.API.Controllers
             return resources;
         }
 
+        [SwaggerOperation(
+           Summary = "Get all students by Team",
+           Description = "Get all students by an specific Team",
+           OperationId = "GetAllStudentsByTeam",
+           Tags = new[] { "students" }
+           )]
         [HttpGet("teams/{teamId}")]
         public async Task<IEnumerable<StudentResource>> GetAllByTeamIdAsync(int teamId)
         {
@@ -43,6 +56,12 @@ namespace Roommates.API.Controllers
             return resources;
         }
 
+        [SwaggerOperation(
+           Summary = "Get Student",
+           Description = "Get Student by id",
+           OperationId = "GetStudentById",
+           Tags = new[] { "students" }
+           )]
         [HttpGet("{id}")]
         public async Task<StudentResource> GetByStudentId(int id)
         {
@@ -51,7 +70,12 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
-
+        [SwaggerOperation(
+           Summary = "Create Student",
+           Description = "Create a new Student",
+           OperationId = "CreateStudent",
+           Tags = new[] { "students" }
+           )]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveStudentResource resource)
         {
@@ -70,6 +94,12 @@ namespace Roommates.API.Controllers
             return Ok(studentResource);
         }
 
+        [SwaggerOperation(
+           Summary = "Join team",
+           Description = "Join a team",
+           OperationId = "JoinTeam",
+           Tags = new[] { "students" }
+           )]
         [HttpPost("{id}")]
         public async Task<IActionResult> JointTeam([FromBody] SaveTeamResource resource, int id)
         {
@@ -88,6 +118,12 @@ namespace Roommates.API.Controllers
             return Ok(studentResource);
         }
 
+        [SwaggerOperation(
+           Summary = "Update Student",
+           Description = "Update an specific Student",
+           OperationId = "UpdateStudent",
+           Tags = new[] { "students" }
+           )]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync([FromBody] SaveStudentResource resource, int id)
         {
@@ -102,8 +138,13 @@ namespace Roommates.API.Controllers
             return Ok(studentResource);
         }
 
-
-        [HttpPut("teams/{id}")]
+        [SwaggerOperation(
+           Summary = "Leave team",
+           Description = "Leave a team",
+           OperationId = "LeaveTeam",
+           Tags = new[] { "students" }
+           )]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> LeaveTeam(int id)
         {
 
@@ -117,6 +158,12 @@ namespace Roommates.API.Controllers
             return Ok(studentResource);
         }
 
+        [SwaggerOperation(
+           Summary = "Delete Student",
+           Description = "Delete an specific Student",
+           OperationId = "DeleteStudent",
+           Tags = new[] { "students" }
+           )]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

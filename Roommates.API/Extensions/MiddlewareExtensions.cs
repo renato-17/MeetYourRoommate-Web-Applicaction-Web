@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Roommates.API.Extensions
@@ -18,8 +20,15 @@ namespace Roommates.API.Extensions
                 {
                     Title = "Meet Your Roommate API",
                     Version = "v1",
-                    Description = "Meet Your Roommate RESTful API"
+                    Description = "Meet Your Roommate RESTful API",
+                    Contact = new OpenApiContact { Name = "CodeMaster Team" }
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                c.IncludeXmlComments(xmlPath);
+                
                 c.EnableAnnotations();
             });
             return services;

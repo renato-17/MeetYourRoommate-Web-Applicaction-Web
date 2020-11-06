@@ -78,7 +78,9 @@ namespace Roommates.API.Services
             existingLessor.Address = lessor.Address;
             existingLessor.Birthdate = lessor.Birthdate;
             existingLessor.Premium = lessor.Premium;
-
+            existingLessor.Mail = lessor.Mail;
+            existingLessor.Password = lessor.Password;
+            
             try
             {
                 _lessorRepository.Update(existingLessor);

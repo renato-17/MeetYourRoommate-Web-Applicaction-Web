@@ -9,11 +9,12 @@ namespace Roommates.API.Domain.Services
 {
     public interface IRequestService
     {
-        public Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestSent(int personOneId);
-        public Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestReceive(int personTwoId);
-        public Task<FriendshipRequestResponse> GetByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId);
-        public Task<FriendshipRequestResponse> AddTeamRequestAsync(int personOneId, int personTwoId);
-        public Task<FriendshipRequestResponse> AddLessorRequestAsync(int personOneId, int personTwoId);
-        public Task<FriendshipRequestResponse> AnswerRequest(int personOneId, int id, int answer);
+        public Task<IEnumerable<Request>> GetSentRequests(int personOneId);
+        public Task<IEnumerable<Request>> GetReceivedRequests(int personTwoId);
+        public Task<RequestResponse> GetByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId);
+        public Task<RequestResponse> AddTeamRequestAsync(int personOneId, int personTwoId);
+        public Task<RequestResponse> AddLeaseRequestAsync(int personOneId, int personTwoId);
+        public Task<RequestResponse> AnswerRequest(int personOneId, int id, int answer);
+        public Task<RequestResponse> DeleteAsync(int personOneId, int personTwoId);
     }
 }

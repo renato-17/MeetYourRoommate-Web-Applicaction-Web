@@ -100,8 +100,21 @@ namespace Roommates.API.Services
             if (existingStudent == null)
                 return new StudentResponse("Student not found");
 
-            existingStudent = UpdatedStudent(student);
-
+           
+            existingStudent.FirstName = student.FirstName;
+            existingStudent.LastName = student.LastName;
+            existingStudent.Dni = student.Dni;
+            existingStudent.Phone = student.Phone;
+            existingStudent.Gender = student.Gender;
+            existingStudent.Address = student.Address;
+            existingStudent.Birthdate = student.Birthdate;
+            existingStudent.Description = student.Description;
+            existingStudent.Hobbies = student.Hobbies;
+            existingStudent.Smoker = student.Smoker;
+            existingStudent.Mail = student.Mail;
+            existingStudent.Password = student.Password;
+            existingStudent.Available = student.Available;
+            
             try
             {
                 _studentRepository.Update(existingStudent);
@@ -111,7 +124,7 @@ namespace Roommates.API.Services
             }
             catch (Exception ex)
             {
-                return new StudentResponse($"An error ocurred while removing student: {ex.Message}");
+                return new StudentResponse($"An error ocurred while update student: {ex.InnerException}");
             }
         }
 
@@ -160,6 +173,8 @@ namespace Roommates.API.Services
             if (existingStudent == null)
                 return new StudentResponse("Student not found");
 
+            if (existingStudent.Team == null)
+                return new StudentResponse("Student does not have team");
 
             existingStudent.Team = null;
             existingStudent.TeamId = null;
@@ -183,24 +198,6 @@ namespace Roommates.API.Services
                 return new StudentResponse($"An error ocurred while leaving a team: {ex.Message}");
             }
 
-        }
-
-        private Student UpdatedStudent(Student student)
-        {
-
-            return new Student
-            {
-                FirstName = student.FirstName,
-                LastName = student.LastName,
-                Dni = student.Dni,
-                Phone = student.Phone,
-                Gender = student.Gender,
-                Address = student.Address,
-                Birthdate = student.Birthdate,
-                Description = student.Description,
-                Hobbies = student.Hobbies,
-                Smoker = student.Smoker
-            };
         }
 
 

@@ -26,11 +26,12 @@ namespace Roommates.API.Controllers
             _commentService = commentService;
             _mapper = mapper;
         }
+
         [SwaggerOperation(
             Summary = "List comments by ad",
-            Description = "List of comments for an specific Ad",
+            Description = "List of comments by an specific Ad",
             OperationId = "ListCommentByAd",
-            Tags = new[] { "Ads" }
+            Tags = new[] { "comments" }
             )]
         [HttpGet]
         public async Task<IEnumerable<CommentResource>> GetAllByAdIdAsync(int adId)
@@ -44,7 +45,7 @@ namespace Roommates.API.Controllers
            Summary = "Create  a comment",
            Description = "Create a new comment",
            OperationId = "CreateComment",
-           Tags = new[] { "Comments" }
+           Tags = new[] { "comments" }
            )]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveCommentResource resource, int adId)
@@ -59,5 +60,43 @@ namespace Roommates.API.Controllers
             return Ok(commentResource);
         }
 
+        [SwaggerOperation(
+           Summary = "Update comment",
+           Description = "Update an specific comment",
+           OperationId = "CreateComment",
+           Tags = new[] { "comments" }
+           )]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAsync([FromBody] SaveCommentResource resource, int id, int adId)
+        {
+            var comment = _mapper.Map<SaveCommentResource, Comment>(resource);
+            var result = await _commentService.UpdateAsync(comment, id, adId);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studentResource = _mapper.Map<Comment, CommentResource>(result.Resource);
+
+            return Ok(studentResource);
+        }
+
+        [SwaggerOperation(
+         Summary = "Delete comment",
+         Description = "Delete an specific comment",
+         OperationId = "DeleteComment",
+         Tags = new[] { "comments" }
+         )]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id, int adId)
+        {
+            var result = await _commentService.DeleteAsync(id,adId);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studyCenterResource = _mapper.Map<Comment, CommentResource>(result.Resource);
+
+            return Ok(studyCenterResource);
+        }
     }
 }

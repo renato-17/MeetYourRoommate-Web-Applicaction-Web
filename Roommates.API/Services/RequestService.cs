@@ -11,7 +11,7 @@ namespace Roommates.API.Services
 {
     public class RequestService : IRequestService
     {
-        private readonly IRequestRepository _friendshipRequestRepository;
+        private readonly IRequestRepository _requestRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly IPersonRepository _personRepository;
         private readonly ILessorRepository _lessorRepository;
@@ -19,28 +19,28 @@ namespace Roommates.API.Services
 
         public RequestService(IRequestRepository friendshipRequestRepository, IStudentRepository studentRepository, IUnitOfWork unitOfWork, IPersonRepository personRepository, ILessorRepository lessorRepository)
         {
-            _friendshipRequestRepository = friendshipRequestRepository;
+            _requestRepository = friendshipRequestRepository;
             _studentRepository = studentRepository;
             _personRepository = personRepository;
             _lessorRepository = lessorRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<FriendshipRequestResponse> AddTeamRequestAsync(int personOneId, int personTwoId)
+        public async Task<RequestResponse> AddTeamRequestAsync(int personOneId, int personTwoId)
         {
             if (personOneId == personTwoId)
-                return new FriendshipRequestResponse("You can not send a friend request to yourself");
+                return new RequestResponse("You can not send a friend request to yourself");
 
             var studentOne = await _studentRepository.FindById(personOneId);
             var studentTwo = await _studentRepository.FindById(personTwoId);
 
             if (!studentOne.Available)
-                return new FriendshipRequestResponse("You can not send a friend request because you have roommate");
+                return new RequestResponse("You can not send a friend request because you have roommate");
 
             if (!studentTwo.Available)
-                return new FriendshipRequestResponse("The student you want to send a friend request to, have roommate ");
+                return new RequestResponse("The student you want to send a friend request to, have roommate ");
 
-            var newFriendshipRequest = new FriendshipRequest
+            var newFriendshipRequest = new Request
             {
                 PersonOneId = studentOne.Id,
                 PersonOne = studentOne,
@@ -52,30 +52,31 @@ namespace Roommates.API.Services
 
             try
             {
-                await _friendshipRequestRepository.AddAsync(newFriendshipRequest);
+                await _requestRepository.AddAsync(newFriendshipRequest);
                 await _unitOfWork.CompleteAsync();
 
-                return new FriendshipRequestResponse(newFriendshipRequest);
+                return new RequestResponse(newFriendshipRequest);
 
             }
             catch (Exception ex)
             {
-                return new FriendshipRequestResponse($"An error ocurred while adding a team request :{ex.Message}");
+                return new RequestResponse($"An error ocurred while adding a team request :{ex.Message}");
             }
         }
 
-        public async Task<FriendshipRequestResponse> AddLessorRequestAsync(int personOneId, int personTwoId)
+        public async Task<RequestResponse> AddLeaseRequestAsync(int personOneId, int personTwoId)
         {
             if (personOneId == personTwoId)
-                return new FriendshipRequestResponse("You can not send a friend request to yourself");
+                return new RequestResponse("You can not send a friend request to yourself");
 
             var lessor = await _lessorRepository.FindById(personTwoId);
+
             if(lessor == null)
-                return new FriendshipRequestResponse("The lessor is not found or is not avaible at this moment");
+                return new RequestResponse("The lessor is not found or is not avaible at this moment");
             
             var student = await _studentRepository.FindById(personOneId);
 
-            var newFriendshipRequest = new FriendshipRequest
+            var newFriendshipRequest = new Request
             {
                 PersonOneId = student.Id,
                 PersonOne = student,
@@ -86,71 +87,93 @@ namespace Roommates.API.Services
             };
             try
             {
-                await _friendshipRequestRepository.AddAsync(newFriendshipRequest);
+                await _requestRepository.AddAsync(newFriendshipRequest);
                 await _unitOfWork.CompleteAsync();
 
-                return new FriendshipRequestResponse(newFriendshipRequest);
+                return new RequestResponse(newFriendshipRequest);
 
             }
             catch (Exception ex)
             {
-                return new FriendshipRequestResponse($"An error ocurred while adding a lessor request :{ex.Message}");
+                return new RequestResponse($"An error ocurred while adding a lessor request :{ex.Message}");
             }
         }
 
-        public async Task<FriendshipRequestResponse> AnswerRequest(int personOneId, int id, int answer)
+        public async Task<RequestResponse> AnswerRequest(int personOneId, int id, int answer)
         {
             var statusDetail = string.Empty;
 
             if (answer != 1 && answer != 2)
-                return new FriendshipRequestResponse("You must select a valid answer");
+                return new RequestResponse("You must select a valid answer");
 
             if (answer == 1)
                 statusDetail = "Accepted";
             else
                 statusDetail = "Declined";
 
-            var existingFriendshipRequest = await _friendshipRequestRepository.FindByPersonOneIdAndPersonTwoId(personOneId, id);
+            var existingFriendshipRequest = await _requestRepository.FindByPersonOneIdAndPersonTwoId(personOneId, id);
 
             if (existingFriendshipRequest == null)
-                return new FriendshipRequestResponse("Friendship Request does not exist");
+                return new RequestResponse("Request does not exist");
 
             existingFriendshipRequest.Status = answer;
             existingFriendshipRequest.StatusDetail = statusDetail;
 
             try
             {
-                _friendshipRequestRepository.Update(existingFriendshipRequest);
+                _requestRepository.Update(existingFriendshipRequest);
                 await _unitOfWork.CompleteAsync();
 
-                return new FriendshipRequestResponse(existingFriendshipRequest);
+                return new RequestResponse(existingFriendshipRequest);
 
             }
             catch (Exception ex)
             {
-                return new FriendshipRequestResponse($"An error ocurred while updating a  request :{ex.Message}");
+                return new RequestResponse($"An error ocurred while updating a  request :{ex.Message}");
             }
 
         }
 
-        public async Task<FriendshipRequestResponse> GetByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId)
+        public async Task<RequestResponse> GetByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId)
         {
-            var existingFriendshipRequest = await _friendshipRequestRepository.FindByPersonOneIdAndPersonTwoId(personOneId, personTwoId);
+            var existingFriendshipRequest = await _requestRepository.FindByPersonOneIdAndPersonTwoId(personOneId, personTwoId);
 
             if (existingFriendshipRequest == null)
-                return new FriendshipRequestResponse("Request does not exist");
+                return new RequestResponse("Request does not exist");
 
-            return new FriendshipRequestResponse(existingFriendshipRequest);
+            return new RequestResponse(existingFriendshipRequest);
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestReceive(int personTwoId)
+        public async Task<IEnumerable<Request>> GetReceivedRequests(int personTwoId)
         {
-            return await _friendshipRequestRepository.ListByPersonTwoIdAsync(personTwoId);
+            return await _requestRepository.ListByPersonTwoIdAsync(personTwoId);
         }
 
-        public async Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestSent(int personOneId)
+        public async Task<IEnumerable<Request>> GetSentRequests(int personOneId)
         {
-            return await _friendshipRequestRepository.ListByPersonOneIdAsync(personOneId);
+            return await _requestRepository.ListByPersonOneIdAsync(personOneId);
+        }
+
+        public async Task<RequestResponse> DeleteAsync(int personOneId, int personTwoId)
+        {
+
+            var existingFriendshipRequest = await _requestRepository.FindByPersonOneIdAndPersonTwoId(personOneId, personTwoId);
+
+            if (existingFriendshipRequest == null)
+                return new RequestResponse("Request does not exist");
+
+            try
+            {
+                _requestRepository.Remove(existingFriendshipRequest);
+                await _unitOfWork.CompleteAsync();
+
+                return new RequestResponse(existingFriendshipRequest);
+
+            }
+            catch (Exception ex)
+            {
+                return new RequestResponse($"An error ocurred while updating a  request :{ex.Message}");
+            }
         }
     }
 }

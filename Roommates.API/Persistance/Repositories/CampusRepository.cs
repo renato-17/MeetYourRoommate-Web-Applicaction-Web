@@ -23,7 +23,7 @@ namespace Roommates.API.Persistance.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Campus> FindByIdAndStudyCenterId(int id, int studyCenterId)
+        public async Task<Campus> FindByIdAndStudyCenterId(int studyCenterId, int id)
         {
             return await _context.Campuses
                 .Where(c => (c.Id == id) && (c.StudyCenterId == studyCenterId))
