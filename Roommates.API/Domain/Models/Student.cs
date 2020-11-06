@@ -12,6 +12,7 @@ namespace Roommates.API.Domain.Models
         public string Description { get; set; }
         public string Hobbies { get; set; }
         public bool Smoker { get; set; }
+        public bool Available { get; set; }
 
         // Relation with Team
         public int? TeamId { get; set; }
@@ -20,5 +21,11 @@ namespace Roommates.API.Domain.Models
         //Relation with Campus
         public int CampusId { get; set; }
         public Campus Campus { get; set; }
+
+        //Relation with Friend Requests Sent
+        public IList<FriendshipRequest> FriendshipRequestsSent { get; set; } = new List<FriendshipRequest>();
+
+        //Relation with Friend Request Received
+        public IList<FriendshipRequest> FriendshipRequestsReceived { get; set; } = new List<FriendshipRequest>();
     }
 }

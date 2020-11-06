@@ -24,6 +24,7 @@ namespace Roommates.API.Mapping
             CreateMap<Domain.Models.Task, TaskResource>();
             CreateMap<StudyCenter, StudyCenterResource>();
             CreateMap<Campus, CampusResource>();
+            CreateMap<FriendshipRequest, FriendshipRequestResource>();
         }
     }
 }
