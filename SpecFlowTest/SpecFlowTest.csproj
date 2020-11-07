@@ -21,10 +21,6 @@
 	  <ProjectReference Include="..\Roommates.API\Roommates.API.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Steps\" />
-	</ItemGroup>
-
 
 
 </Project>

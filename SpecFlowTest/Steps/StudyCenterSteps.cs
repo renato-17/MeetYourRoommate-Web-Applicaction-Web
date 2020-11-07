@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Roommates.API.Domain.Models;
 
-namespace SpecFlowTest.Features.StudyCenter
+namespace SpecFlowTest.Steps
 {
     [Binding]
     class StudyCenterSteps : BaseTest
@@ -22,7 +22,7 @@ namespace SpecFlowTest.Features.StudyCenter
         {
             try
             {
-                var studyCenter = dto.CreateInstance<Roommates.API.Domain.Models.StudyCenter>();
+                var studyCenter = dto.CreateInstance<StudyCenter>();
                 var data = JsonData(studyCenter);
                 var result = System.Threading.Tasks.Task.Run(async () => await Client.PostAsync(StudyCenterEndPoint, data)).Result;
                 Assert.IsTrue(result != null && result.StatusCode == HttpStatusCode.OK, "Add StudyCenter Integration Test Completed");

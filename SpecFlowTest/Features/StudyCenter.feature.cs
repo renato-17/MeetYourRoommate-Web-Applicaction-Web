@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SpecFlowTest.Features.StudyCenter
+namespace SpecFlowTest.Features
 {
     using TechTalk.SpecFlow;
     using System;
@@ -65,7 +65,7 @@ namespace SpecFlowTest.Features.StudyCenter
             if (((testRunner.FeatureContext != null) 
                         && (testRunner.FeatureContext.FeatureInfo.Title != "StudyCenter")))
             {
-                global::SpecFlowTest.Features.StudyCenter.StudyCenterFeature.FeatureSetup(null);
+                global::SpecFlowTest.Features.StudyCenterFeature.FeatureSetup(null);
             }
         }
         
@@ -121,14 +121,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name"});
-                table1.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "1",
                             "UPC"});
 #line 7
- testRunner.When("studyCenter required attributes provided", ((string)(null)), table1, "When ");
+ testRunner.When("studyCenter required attributes provided", ((string)(null)), table3, "When ");
 #line hidden
             }
             this.ScenarioCleanup();
