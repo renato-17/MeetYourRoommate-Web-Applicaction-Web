@@ -11,8 +11,8 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute("Roommates.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "C:\\Users\\V330\\Desktop\\MeetYourRoomate - AW\\MeetYourRoommate-Web-Applicaction-Web\\" +
-    "Roommates.API", "Roommates.API.csproj", "0")]
+[assembly: Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute("Roommates.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "C:\\Users\\Jeremias\\OneDrive\\Escritorio\\MeetYourRoommate-Web-Applicaction-Web\\Roomm" +
+    "ates.API", "Roommates.API.csproj", "0")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpecFlowTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

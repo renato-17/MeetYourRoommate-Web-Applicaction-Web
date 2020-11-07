@@ -121,14 +121,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name"});
-                table3.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "1",
                             "UPC"});
 #line 7
- testRunner.When("studyCenter required attributes provided", ((string)(null)), table3, "When ");
+ testRunner.When("studyCenter required attributes provided", ((string)(null)), table2, "When ");
 #line hidden
             }
             this.ScenarioCleanup();

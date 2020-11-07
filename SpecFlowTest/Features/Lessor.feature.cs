@@ -20,7 +20,7 @@ namespace SpecFlowTest.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
-    public partial class EnterToThePlatformAsStudentFeature
+    public partial class LessorFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -29,7 +29,7 @@ namespace SpecFlowTest.Features
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "EnterToThePlatformAsStudent.feature"
+#line 1 "Lessor.feature"
 #line hidden
         
         public virtual Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
@@ -48,7 +48,7 @@ namespace SpecFlowTest.Features
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Enter to the platform as Student", "\tAs a person I want to subscribe to the platform as Student", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Lessor", "\tCreate, Read and Update a lessor", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -63,9 +63,9 @@ namespace SpecFlowTest.Features
         public virtual void TestInitialize()
         {
             if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Title != "Enter to the platform as Student")))
+                        && (testRunner.FeatureContext.FeatureInfo.Title != "Lessor")))
             {
-                global::SpecFlowTest.Features.EnterToThePlatformAsStudentFeature.FeatureSetup(null);
+                global::SpecFlowTest.Features.LessorFeature.FeatureSetup(null);
             }
         }
         
@@ -92,15 +92,15 @@ namespace SpecFlowTest.Features
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Succesfully create an acount as Student")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Enter to the platform as Student")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("mytag")]
-        public virtual void SuccesfullyCreateAnAcountAsStudent()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Search a lessor by dni")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Lessor")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("lessorTest")]
+        public virtual void SearchALessorByDni()
         {
             string[] tagsOfScenario = new string[] {
-                    "mytag"};
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Succesfully create an acount as Student", null, new string[] {
-                        "mytag"});
+                    "lessorTest"};
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search a lessor by dni", null, new string[] {
+                        "lessorTest"});
 #line 5
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -122,47 +122,37 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 6
- testRunner.Given("the person enter to the platform", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I know the lessor\'s dni", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 7
+    testRunner.When("I supplied 1 as lessor dni", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "FirstName",
-                            "LastName",
-                            "Dni",
-                            "Phone",
-                            "Gender",
-                            "Address",
-                            "Birthdate",
-                            "Description",
-                            "Hobbies",
-                            "Password",
-                            "Mail",
-                            "Smooker",
-                            "Available"});
+                            "id",
+                            "firstName",
+                            "lastName",
+                            "dni",
+                            "phone",
+                            "gender",
+                            "address",
+                            "birthdate",
+                            "password",
+                            "mail",
+                            "premium"});
                 table1.AddRow(new string[] {
                             "1",
-                            "Juan",
-                            "Perez",
-                            "74567898",
-                            "456789123",
-                            "Male",
-                            "SJM",
+                            "Renato",
+                            "Arredondo",
+                            "78510254",
+                            "984568145",
+                            "male",
+                            "lasorquideas",
                             "2001-05-17",
-                            "Happy person",
-                            "Soccer",
-                            "123456",
-                            "juan@gmail.com",
-                            "false",
+                            "132465",
+                            "arr_av@gmail.com",
                             "true"});
-#line 7
- testRunner.And("enter her/his information", ((string)(null)), table1, "And ");
-#line hidden
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Name"});
-                table2.AddRow(new string[] {
-                            "UPC"});
-#line 10
-    testRunner.And("specify her/his study center", ((string)(null)), table2, "And ");
+#line 8
+ testRunner.Then("lessor details should be", ((string)(null)), table1, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
