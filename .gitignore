@@ -1,3 +1,4 @@
+  
 .vs/
 Roommates.API/bin/
 Roommates.API/obj/
@@ -10,5 +11,3 @@ SpecFlowTest/obj/
 
 RoommateNUnit/bin/
 RoommateNUnit/obj/
-
-

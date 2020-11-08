@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Roommates.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/studyCenters/{studyCenterId}/[controller]")]
+    [Route("api/studycenters/{studyCenterId}/[controller]")]
     [ApiController]
     public class CampusesController: ControllerBase
     {
