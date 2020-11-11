@@ -69,7 +69,7 @@ namespace Roommates.API.Controllers
           Summary = "Delete Lease request",
           Description = "Delete Lease request",
           OperationId = "DeleteLeaseRequest",
-          Tags = new[] { "friendship_requests" }
+          Tags = new[] { "lease_requests" }
           )]
         [HttpDelete("{studentTwoId}")]
         public async Task<IActionResult> DeleteRequest(int studentTwoId, int studentId)

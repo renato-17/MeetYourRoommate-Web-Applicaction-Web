@@ -8,10 +8,8 @@ TestResults
 RoommatesSpecFlow/bin/
 RoommatesSpecFlow/obj/
 
-Roommates.API.Test/bin/
-Roommates.API.Test/obj/
+Roommates.API.UnitTest/bin/
+Roommates.API.UnitTest/obj/
 
-RoommateNUnit/bin/
-RoommateNUnit/obj/
 
 

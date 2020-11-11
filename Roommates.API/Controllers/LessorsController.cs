@@ -29,9 +29,9 @@ namespace Roommates.API.Controllers
         }
 
         [SwaggerOperation(
-            Summary = "List all properties",
-            Description = "List all properties",
-            OperationId = "ListAllProperties",
+            Summary = "List all lessors",
+            Description = "List all lessors",
+            OperationId = "ListAllLessors",
             Tags = new[] { "lessors" }
             )]
         [HttpGet]

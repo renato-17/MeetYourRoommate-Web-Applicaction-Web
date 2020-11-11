@@ -48,7 +48,7 @@ namespace Roommates.API.Controllers
            OperationId = "GetReceivedLeaseRequest",
            Tags = new[] { "friendship_requests" }
            )]
-        [HttpGet("receive")]
+        [HttpGet("received")]
         public async Task<IEnumerable<RequestResource>> GetFriendshipRequestsReceive(int studentId)
         {
             var friendshipRequests = await _friendshipRequestService.GetReceivedRequests(studentId);
