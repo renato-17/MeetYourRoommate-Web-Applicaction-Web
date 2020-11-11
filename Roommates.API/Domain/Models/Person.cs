@@ -19,7 +19,7 @@ namespace Roommates.API.Domain.Models
         public DateTime Birthdate    { get; set; }
         public string Password { get; set; }
         public string Mail { get; set; }
-
+        public string Discriminator { get; set; }
         //Relation with Comment
         public IList<Comment> Comments { get; set; } = new List<Comment>();
 

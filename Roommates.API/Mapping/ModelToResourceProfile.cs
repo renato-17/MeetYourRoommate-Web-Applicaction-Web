@@ -28,7 +28,7 @@ namespace Roommates.API.Mapping
             CreateMap<Reservation, ReservationResource>();
             CreateMap<ReservationDetail, ReservationDetailResource>();
             CreateMap<Request, RequestResource>();
-
+            CreateMap<Person, PersonResource>();
         }
     }
 }

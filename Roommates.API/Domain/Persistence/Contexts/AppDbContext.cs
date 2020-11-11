@@ -36,9 +36,9 @@ namespace Roommates.API.Domain.Persistence.Contexts
             //Person entity
             builder.Entity<Person>().ToTable("People");
             builder.Entity<Person>()
-                .HasDiscriminator<string>("Person Type")
-                .HasValue<Student>("Student")
-                .HasValue<Lessor>("Lessor");
+                .HasDiscriminator(p=>p.Discriminator)
+                .HasValue<Student>("student")
+                .HasValue<Lessor>("lessor");
 
             builder.Entity<Person>().HasKey(p => p.Id);
             builder.Entity<Person>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();

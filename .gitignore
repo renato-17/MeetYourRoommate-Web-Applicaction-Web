@@ -5,11 +5,11 @@ Roommates.API/appsettings
 
 TestResults
 
-RoommatesSpecFlow/bin/
-RoommatesSpecFlow/obj/
+SpecFlowTest/bin/
+SpecFlowTest/obj/
 
-Roommates.API.UnitTest/bin/
-Roommates.API.UnitTest/obj/
+RoommatesAPI.UnitTest/bin/
+RoommatesAPI.UnitTest/obj/
 
 
 
