@@ -13,7 +13,6 @@ namespace Roommates.API
 {
     public class Program
     {
-#pragma warning disable CS1591
         public static void Main(string[] args)
         {
 
@@ -33,6 +32,5 @@ namespace Roommates.API
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-#pragma warning restore CS1591
     }
 }

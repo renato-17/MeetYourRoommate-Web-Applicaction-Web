@@ -34,6 +34,7 @@ namespace Roommates.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCustomSwagger();
 
             services.AddControllers();
@@ -93,7 +94,7 @@ namespace Roommates.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(Startup));
-
+            services.ActiveCors();
             services.AddRouting(opt => opt.LowercaseUrls = true);
 
            
@@ -102,10 +103,13 @@ namespace Roommates.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors();
 
             app.UseHttpsRedirection();
 

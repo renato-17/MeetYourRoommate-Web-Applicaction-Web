@@ -33,6 +33,20 @@ namespace Roommates.API.Extensions
             });
             return services;
         }
+        public static IServiceCollection ActiveCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("https://meetyourroommateapi.azurewebsites.net");
+                                  });
+            });
+
+            return services;
+        }
+
         public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app)
         {
             app.UseSwagger(c =>
