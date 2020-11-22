@@ -40,7 +40,9 @@ namespace Roommates.API.Extensions
                 options.AddDefaultPolicy(
                                   builder =>
                                   {
-                                      builder.WithOrigins("https://meetyourroommateapi.azurewebsites.net");
+                                      builder.WithOrigins("https://meetyourroommateapi.azurewebsites.net")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
                                   });
             });
 
