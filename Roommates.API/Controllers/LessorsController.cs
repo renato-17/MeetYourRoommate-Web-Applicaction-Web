@@ -37,7 +37,7 @@ namespace Roommates.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<LessorResource>> GetAllAsync()
         {
-            var lessors = await _lessorService.LystAsync();
+            var lessors = await _lessorService.ListAsync();
             var resources = _mapper.Map<IEnumerable<Lessor>, IEnumerable<LessorResource>>(lessors);
             return resources;
         }
@@ -63,9 +63,9 @@ namespace Roommates.API.Controllers
             Tags = new[] { "lessors" }
             )]
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody]SaveLessorResource resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveLessorResource resource)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetMessages());
 
             var lessor = _mapper.Map<SaveLessorResource, Lessor>(resource);
@@ -115,5 +115,7 @@ namespace Roommates.API.Controllers
 
             return Ok(lessorResource);
         }
+
+        
     }
 }

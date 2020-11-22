@@ -14,7 +14,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Roommates.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/lessors/{lessorId}/properties/{propertyId}/[controller]")]
+    [Route("api/properties/{propertyId}/[controller]")]
     [ApiController]
     public class PropertyDetailsController : ControllerBase
     {
@@ -34,9 +34,9 @@ namespace Roommates.API.Controllers
             Tags = new[] { "property_details" }
             )]
         [HttpGet]
-        public async Task<PropertyDetailResource> GetPropertyDetailAsync(int lessorId, int propertyId)
+        public async Task<PropertyDetailResource> GetPropertyDetailAsync(int propertyId)
         {
-            var propertyDetail = await _propertyDetailService.GetPropertyDetailAsync(lessorId, propertyId);
+            var propertyDetail = await _propertyDetailService.GetPropertyDetailAsync(propertyId);
             var resource = _mapper.Map<PropertyDetail, PropertyDetailResource>(propertyDetail.Resource);
             return resource;
         }
@@ -48,14 +48,14 @@ namespace Roommates.API.Controllers
             Tags = new[] { "property_details" }
             )]
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SavePropertyDetailResource resource, int lessorId, int propertyId)
+        public async Task<IActionResult> PostAsync([FromBody] SavePropertyDetailResource resource,int propertyId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetMessages());
 
             var propertyDetail = _mapper.Map<SavePropertyDetailResource, PropertyDetail>(resource);
 
-            var result = await _propertyDetailService.SaveAsync(lessorId, propertyId, propertyDetail);
+            var result = await _propertyDetailService.SaveAsync(propertyId, propertyDetail);
 
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -68,14 +68,14 @@ namespace Roommates.API.Controllers
         [SwaggerOperation(
             Summary = "Update Property detail",
             Description = "Update an specific Property detail",
-            OperationId = "CreatePropertyDetail",
+            OperationId = "UpdatePropertyDetail",
             Tags = new[] { "property_details" }
             )]
         [HttpPut]
-        public async Task<IActionResult> PutAsync([FromBody] SavePropertyDetailResource resource, int lessorId, int propertyId)
+        public async Task<IActionResult> PutAsync([FromBody] SavePropertyDetailResource resource,int propertyId)
         {
             var propertyDetail = _mapper.Map<SavePropertyDetailResource, PropertyDetail>(resource);
-            var result = await _propertyDetailService.UpdateAsync(lessorId, propertyId, propertyDetail);
+            var result = await _propertyDetailService.UpdateAsync(propertyId, propertyDetail);
 
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -92,10 +92,10 @@ namespace Roommates.API.Controllers
             Tags = new[] { "property_details" }
             )]
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(int lessorId, int propertyId)
+        public async Task<IActionResult> DeleteAsync(int propertyId)
         {
             
-            var result = await _propertyDetailService.DeleteAsync(lessorId, propertyId);
+            var result = await _propertyDetailService.DeleteAsync(propertyId);
 
             if (!result.Success)
                 return BadRequest(result.Message);

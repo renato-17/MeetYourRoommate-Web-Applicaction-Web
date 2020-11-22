@@ -9,5 +9,6 @@ namespace Roommates.API.Resource
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public PropertyResource Property { get; set; }
     }
 }

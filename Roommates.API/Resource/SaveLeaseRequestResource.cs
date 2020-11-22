@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace Roommates.API.Resource
 {
-    public class SaveReservationResource
+    public class SaveLeaseRequestResource
     {
-        [Required]
-        public DateTime DateStart { get; set; }
-        [Required]
-        public DateTime DateEnd { get; set; }
-        [Required]
-        public int StudentId { get; set; }
         [Required]
         public int PropertyId { get; set; }
     }

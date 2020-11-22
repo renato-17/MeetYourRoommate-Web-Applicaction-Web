@@ -11,5 +11,9 @@ namespace Roommates.API.Resource
         [Required]
         [MaxLength(20)]
         public string Title { get; set; }
+        [Required]
+        public int LessorId { get; set; }
+        [Required]
+        public int PropertyId { get; set; }
     }
 }

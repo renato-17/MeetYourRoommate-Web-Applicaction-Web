@@ -48,6 +48,11 @@ namespace Roommates.API.Persistance.Repositories
             _context.Remove(friendshipRequest);
         }
 
-     
+        public async Task<Request> FindByPersonOneAndPropertyId(int personOneId, int propertyId)
+        {
+            return await _context.Request
+                .Where(r => (r.PersonOneId == personOneId) && (r.PropertyId == propertyId))
+                .FirstAsync();
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace Roommates.API.Services
         {
             var existingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId,id);
             if (existingProperty == null)
-                return new PropertyResponse("Property not found");
+                return new PropertyResponse("Property or Lessor not found");
             return new PropertyResponse(existingProperty);
         }
 
@@ -85,9 +85,9 @@ namespace Roommates.API.Services
             }
         }
 
-        public async Task<PropertyResponse> RemoveAsync(int lessorId, int id)
+        public async Task<PropertyResponse> RemoveAsync(int id)
         {
-            var existingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, id);
+            var existingProperty = await _propertyRepository.FindById(id);
 
             if (existingProperty == null)
                 return new PropertyResponse("Property not found");
@@ -102,6 +102,15 @@ namespace Roommates.API.Services
             {
                 return new PropertyResponse($"An error ocurred while removing property: {ex.Message}");
             }
+        }
+
+        public async Task<PropertyResponse> GetByIdAsync(int id)
+        {
+            var existingProperty = await _propertyRepository.FindById(id);
+            if (existingProperty == null)
+                return new PropertyResponse("Property not found");
+
+            return new PropertyResponse(existingProperty);
         }
 
     }

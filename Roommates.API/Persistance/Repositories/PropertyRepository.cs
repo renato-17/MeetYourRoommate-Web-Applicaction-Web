@@ -35,7 +35,6 @@ namespace Roommates.API.Persistance.Repositories
         {
             return await _context.Properties
                 .Where(p => p.LessorId == lessorId)
-                .Include(p => p.LessorId)
                 .Include(p => p.PropertyDetail)
                 .ToListAsync();
         }

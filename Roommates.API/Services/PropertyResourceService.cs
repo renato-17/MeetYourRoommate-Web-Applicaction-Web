@@ -23,17 +23,16 @@ namespace Roommates.API.Services
             _propertyRepository = propertyRepository;
         }
 
-        public async Task<IEnumerable<PropertyResource>> ListByPropertyDetailId(int lessorId, int propertyId)
+        public async Task<IEnumerable<PropertyResource>> ListByPropertyDetailId(int propertyId)
         {
-            var property = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
-
+            var property = await _propertyRepository.FindById(propertyId);
             var propertyDetail = property.PropertyDetail;
             return await _propertyResourceRepository.ListByPropertyDetailId(propertyDetail.Id);
         }
 
-        public async Task<PropertyResourceResponse> FindByIdAndPropertyDetailId(int lessorId, int propertyId, int id)
+        public async Task<PropertyResourceResponse> FindByIdAndPropertyDetailId(int propertyId, int id)
         {
-            var existingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
+            var existingProperty = await _propertyRepository.FindById(propertyId);
 
             if (existingProperty == null)
                 return new PropertyResourceResponse("Property not found");
@@ -46,9 +45,9 @@ namespace Roommates.API.Services
             return new PropertyResourceResponse(existingPropertyResource);
         }
 
-        public async Task<PropertyResourceResponse> SaveAsync(int lessorId, int propertyId, PropertyResource propertyResource)
+        public async Task<PropertyResourceResponse> SaveAsync(int propertyId, PropertyResource propertyResource)
         {
-            var existingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
+            var existingProperty = await _propertyRepository.FindById(propertyId);
 
             if (existingProperty == null)
                 return new PropertyResourceResponse("Property not found");
@@ -72,9 +71,9 @@ namespace Roommates.API.Services
             }
         }
 
-        public async Task<PropertyResourceResponse> UpdateAsync(int lessorId, int propertyId, int id, PropertyResource propertyResource)
+        public async Task<PropertyResourceResponse> UpdateAsync(int propertyId, int id, PropertyResource propertyResource)
         {
-            var existingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
+            var existingProperty = await _propertyRepository.FindById(propertyId);
 
             if (existingProperty == null)
                 return new PropertyResourceResponse("Property not found");
@@ -99,9 +98,9 @@ namespace Roommates.API.Services
             }
         }
 
-        public async Task<PropertyResourceResponse> DeleteAsync(int lessorId, int propertyId, int id)
+        public async Task<PropertyResourceResponse> DeleteAsync(int propertyId, int id)
         {
-            var existingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
+            var existingProperty = await _propertyRepository.FindById(propertyId);
 
             if (existingProperty == null)
                 return new PropertyResourceResponse("Property not found");

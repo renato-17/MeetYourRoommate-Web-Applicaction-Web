@@ -10,7 +10,7 @@ namespace Roommates.API.Domain.Services
     {
         Task<IEnumerable<Reservation>> ListAsync();
         Task<ReservationResponse> GetByIdAsync(int id);
-        Task<ReservationResponse> SaveAsync(Reservation reservation);
+        Task<ReservationResponse> SaveAsync(int studentId,int propertyId,Reservation reservation);
         Task<ReservationResponse> UpdateAsync(int id, Reservation reservation);
         Task<ReservationResponse> DeleteAsync(int id);
     }

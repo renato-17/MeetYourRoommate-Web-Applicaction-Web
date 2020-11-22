@@ -34,12 +34,12 @@ namespace Roommates.API.Controllers
            Tags = new[] { "lease_requests" }
            )]
         [HttpPost("{lessorId}")]
-        public async Task<IActionResult> SendLeaseRequest(int studentId, int lessorId)
+        public async Task<IActionResult> SendLeaseRequest([FromBody]SaveLeaseRequestResource resource, int studentId, int lessorId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetMessages());
 
-            var result = await _friendshipRequestService.AddLeaseRequestAsync(studentId, lessorId);
+            var result = await _friendshipRequestService.AddLeaseRequestAsync(studentId, lessorId, resource.PropertyId);
 
             var friendshipRequest = await _friendshipRequestService.GetByPersonOneIdAndPersonTwoId(studentId, lessorId);
 

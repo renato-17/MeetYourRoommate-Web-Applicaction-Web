@@ -13,7 +13,7 @@ namespace Roommates.API.Domain.Services
         public Task<IEnumerable<Request>> GetReceivedRequests(int personTwoId);
         public Task<RequestResponse> GetByPersonOneIdAndPersonTwoId(int personOneId, int personTwoId);
         public Task<RequestResponse> AddTeamRequestAsync(int personOneId, int personTwoId);
-        public Task<RequestResponse> AddLeaseRequestAsync(int personOneId, int personTwoId);
+        public Task<RequestResponse> AddLeaseRequestAsync(int personOneId, int personTwoId, int propertyId);
         public Task<RequestResponse> AnswerRequest(int personOneId, int id, int answer);
         public Task<RequestResponse> DeleteAsync(int personOneId, int personTwoId);
     }

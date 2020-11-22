@@ -13,17 +13,17 @@ namespace Roommates.API.Services
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IStudentRepository _studentRepository;
-        private readonly IPersonRepository _personRepository;
         private readonly ILessorRepository _lessorRepository;
+        private readonly IPropertyRepository _propertyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RequestService(IRequestRepository friendshipRequestRepository, IStudentRepository studentRepository, IUnitOfWork unitOfWork, IPersonRepository personRepository, ILessorRepository lessorRepository)
+        public RequestService(IRequestRepository friendshipRequestRepository, IStudentRepository studentRepository, IUnitOfWork unitOfWork, ILessorRepository lessorRepository, IPropertyRepository propertyRepository)
         {
             _requestRepository = friendshipRequestRepository;
             _studentRepository = studentRepository;
-            _personRepository = personRepository;
             _lessorRepository = lessorRepository;
             _unitOfWork = unitOfWork;
+            _propertyRepository = propertyRepository;
         }
 
         public async Task<RequestResponse> AddTeamRequestAsync(int personOneId, int personTwoId)
@@ -64,8 +64,12 @@ namespace Roommates.API.Services
             }
         }
 
-        public async Task<RequestResponse> AddLeaseRequestAsync(int personOneId, int personTwoId)
+        public async Task<RequestResponse> AddLeaseRequestAsync(int personOneId, int personTwoId, int propertyId)
         {
+            var existingProperty = await _propertyRepository.FindById(propertyId);
+            if (existingProperty == null)
+                return new RequestResponse("Property not found");
+
             if (personOneId == personTwoId)
                 return new RequestResponse("You can not send a friend request to yourself");
 
@@ -83,8 +87,10 @@ namespace Roommates.API.Services
                 PersonTwoId = lessor.Id,
                 PersonTwo = lessor,
                 StatusDetail = "Pending",
-                Type = "lessorrequest"
+                Type = "lessorrequest",
+                PropertyId = propertyId
             };
+
             try
             {
                 await _requestRepository.AddAsync(newFriendshipRequest);

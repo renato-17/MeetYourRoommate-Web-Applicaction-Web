@@ -67,7 +67,7 @@ namespace Roommates.API.Controllers
                 return BadRequest(ModelState.GetMessages());
 
             var reservations = _mapper.Map<SaveReservationResource, Reservation>(resource);
-            var result = await _reservationService.SaveAsync(reservations);
+            var result = await _reservationService.SaveAsync(resource.StudentId,resource.PropertyId,reservations);
 
             if (!result.Success)
                 return BadRequest(result.Message);

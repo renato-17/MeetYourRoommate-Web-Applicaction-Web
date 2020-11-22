@@ -12,12 +12,14 @@ namespace Roommates.API.Services
     public class ReservationService : IReservationService
     {
         private readonly IReservationRepository _reservationRepository;
+        private readonly IRequestRepository _requestRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ReservationService(IReservationRepository reservationRepository, IUnitOfWork unitOfWork)
+        public ReservationService(IReservationRepository reservationRepository, IUnitOfWork unitOfWork, IRequestRepository requestRepository)
         {
             _reservationRepository = reservationRepository;
             _unitOfWork = unitOfWork;
+            _requestRepository = requestRepository;
         }
 
 
@@ -36,8 +38,18 @@ namespace Roommates.API.Services
             return await _reservationRepository.ListAsync();
         }
 
-        public async Task<ReservationResponse> SaveAsync(Reservation reservation)
+        public async Task<ReservationResponse> SaveAsync(int studentId,int propertyId,Reservation reservation)
         {
+            var existingRequest = await _requestRepository.FindByPersonOneAndPropertyId(studentId, propertyId);
+            if (existingRequest == null)
+                return new ReservationResponse("There is not any request of reservation");
+
+            if (existingRequest.Status == 0)
+                return new ReservationResponse("You have not answer this request");
+
+            if (existingRequest.Status == 2)
+                return new ReservationResponse("You have declined this request");
+
             try
             {
                 await _reservationRepository.AddAsync(reservation);

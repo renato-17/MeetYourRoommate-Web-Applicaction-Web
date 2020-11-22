@@ -9,9 +9,9 @@ namespace Roommates.API.Domain.Services
 {
     public interface IPropertyDetailService
     {
-        Task<PropertyDetailResponse> GetPropertyDetailAsync(int lessorId, int propertyId);
-        Task<PropertyDetailResponse> SaveAsync(int lessorId, int propertyId, PropertyDetail propertyDetail);
-        Task<PropertyDetailResponse> UpdateAsync(int lessorId, int propertyId, PropertyDetail propertyDetail);
-        Task<PropertyDetailResponse> DeleteAsync(int lessorId, int propertyId);
+        Task<PropertyDetailResponse> GetPropertyDetailAsync(int propertyId);
+        Task<PropertyDetailResponse> SaveAsync(int propertyId, PropertyDetail propertyDetail);
+        Task<PropertyDetailResponse> UpdateAsync(int propertyId, PropertyDetail propertyDetail);
+        Task<PropertyDetailResponse> DeleteAsync(int propertyId);
     }
 }

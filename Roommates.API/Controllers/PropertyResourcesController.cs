@@ -14,7 +14,7 @@ namespace Roommates.API.Controllers
 {
     [Produces("application/json")]
     [ApiController]
-    [Route("api/lessors/{lessorId}/properties/{propertyId}/propertydetails/[controller]")]
+    [Route("api/properties/{propertyId}/property-details/[controller]")]
     public class PropertyResourcesController : ControllerBase
     {
         private readonly IPropertyResourceService _propertyResourceService;
@@ -32,9 +32,9 @@ namespace Roommates.API.Controllers
             OperationId = "GetAllPropertyResource",
             Tags = new[] { "property_resources" })]
         [HttpGet]
-        public async Task<IEnumerable<PropertyResourceResource>> GetAllAsync(int lessorId, int propertyId)
+        public async Task<IEnumerable<PropertyResourceResource>> GetAllAsync(int propertyId)
         {
-            var propertyResources = await _propertyResourceService.ListByPropertyDetailId(lessorId, propertyId);
+            var propertyResources = await _propertyResourceService.ListByPropertyDetailId(propertyId);
             var resources = _mapper.Map<IEnumerable<Domain.Models.PropertyResource>, IEnumerable<PropertyResourceResource>>(propertyResources);
             return resources;
         }
@@ -45,14 +45,14 @@ namespace Roommates.API.Controllers
             OperationId = "CreatePropertyResource",
             Tags = new[] { "property_resources" })]
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SavePropertyResourceResource resource, int lessorId, int propertyId)
+        public async Task<IActionResult> PostAsync([FromBody] SavePropertyResourceResource resource, int propertyId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetMessages());
 
             var propertyResource = _mapper.Map<SavePropertyResourceResource, Domain.Models.PropertyResource>(resource);
 
-            var result = await _propertyResourceService.SaveAsync(lessorId, propertyId, propertyResource);
+            var result = await _propertyResourceService.SaveAsync(propertyId, propertyResource);
 
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -69,12 +69,12 @@ namespace Roommates.API.Controllers
             Tags = new[] { "property_resources" }
             )]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync([FromBody] SavePropertyResourceResource resource,int id, int lessorId, int propertyId)
+        public async Task<IActionResult> PutAsync([FromBody] SavePropertyResourceResource resource,int id, int propertyId)
         {
 
             var propertyResource = _mapper.Map<SavePropertyResourceResource, Domain.Models.PropertyResource>(resource);
 
-            var result = await _propertyResourceService.UpdateAsync(lessorId, propertyId,id,propertyResource);
+            var result = await _propertyResourceService.UpdateAsync(propertyId,id,propertyResource);
 
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -91,10 +91,10 @@ namespace Roommates.API.Controllers
             Tags = new[] { "property_resources" }
             )]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int lessorId, int propertyId, int id)
+        public async Task<IActionResult> DeleteAsync(int propertyId, int id)
         {
 
-            var result = await _propertyResourceService.DeleteAsync(lessorId, propertyId,id);
+            var result = await _propertyResourceService.DeleteAsync(propertyId,id);
 
             if (!result.Success)
                 return BadRequest(result.Message);

@@ -23,22 +23,6 @@ namespace Roommates.API.Services
             _lessorRepository = lessorRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<AdResponse> DeleteAsync(int id, int lessorId, int propertyId)
-        {
-            var existingAd = await _adRepository.FindByIdAndLessorIdAndPropertyId(id, lessorId, propertyId);
-            if (existingAd == null)
-                return new AdResponse("Ad not found");
-            try
-            {
-                _adRepository.Remove(existingAd);
-                await _unitOfWork.CompleteAsync();
-                return new AdResponse(existingAd);
-            }
-            catch (Exception ex)
-            {
-                return new AdResponse($"An error ocurred while deleting ad: { ex.Message}");
-            }
-        }
 
         public async Task<AdResponse> GetById(int id)
         {
@@ -61,9 +45,14 @@ namespace Roommates.API.Services
             return await _adRepository.ListAsync();
         }
 
-        public async Task<IEnumerable<Ad>> ListByLessorIdAndPropertyIdAsync(int lessorId, int propertyId)
+        public async Task<IEnumerable<Ad>> ListByPropertyIdAsync(int propertyId)
         {
-            return await _adRepository.ListByLessorIdAndPropertyIdAsync(lessorId,propertyId);
+            return await _adRepository.ListByPropertyIdAsync(propertyId);
+        }
+
+        public async Task<IEnumerable<Ad>> ListByLessorIdAsync(int lessorId)
+        {
+            return await _adRepository.ListByLessorIdAsync(lessorId);
         }
 
         public async Task<AdResponse> SaveAsync(Ad ad,int lessorId, int propertyId)
@@ -113,6 +102,25 @@ namespace Roommates.API.Services
             catch(Exception ex)
             {
                 return new AdResponse($"An error ocurred while updating ad: {ex.Message}");
+            }
+        }
+
+        public async Task<AdResponse> DeleteAsync(int id)
+        {            
+            var existingAd = await _adRepository.FindById(id);
+
+            if (existingAd == null)
+                return new AdResponse("Ad not found");
+
+            try
+            {
+                _adRepository.Remove(existingAd);
+                await _unitOfWork.CompleteAsync();
+                return new AdResponse(existingAd);
+            }
+            catch (Exception ex)
+            {
+                return new AdResponse($"An error ocurred while remove ad: {ex.Message}");
             }
         }
     }

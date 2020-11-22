@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Roommates.API.Domain.Models
 {
-    public class Request 
+    public class Request
     {
         public int Status { get; set; }
         public string StatusDetail { get; set; }
-        public string Type { get; set; } 
+        public string Type { get; set; }
 
         //Relation with the first Student
         public int PersonOneId { get; set; }
@@ -18,5 +18,7 @@ namespace Roommates.API.Domain.Models
         //Relation with the second Student
         public int PersonTwoId { get; set; }
         public Person PersonTwo { get; set; }
+
+        public int PropertyId { get; set; }
     }
 }

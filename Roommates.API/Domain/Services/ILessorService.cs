@@ -9,7 +9,7 @@ namespace Roommates.API.Domain.Services
 {
     public interface ILessorService
     {
-        Task<IEnumerable<Lessor>> LystAsync();
+        Task<IEnumerable<Lessor>> ListAsync();
         Task<LessorResponse> GetByIdAsync(int id);
         Task<LessorResponse> SaveAsync(Lessor lessor);
         Task<LessorResponse> UpdateAsync(int id, Lessor lessor);

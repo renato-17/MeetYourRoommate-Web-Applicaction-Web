@@ -28,7 +28,7 @@ namespace Roommates.API.Services
             return new LessorResponse(existingLessor);
         }
 
-        public async Task<IEnumerable<Lessor>> LystAsync()
+        public async Task<IEnumerable<Lessor>> ListAsync()
         {
             return await _lessorRepository.ListAsync();
         }

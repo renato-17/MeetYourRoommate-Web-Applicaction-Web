@@ -19,7 +19,7 @@ namespace Roommates.API.Services
             _unitOfWork = unitOfWork;
             _propertyRepository = propertyRepository;
         }
-        public async Task<PropertyDetailResponse> GetPropertyDetailAsync(int lessorId, int propertyId)
+        public async Task<PropertyDetailResponse> GetPropertyDetailAsync(int propertyId)
         {
             var existingPropertyDetail = await _propertyDetailRepository.GetPropertyDetail(propertyId);
 
@@ -29,9 +29,9 @@ namespace Roommates.API.Services
             return new PropertyDetailResponse(existingPropertyDetail);
         }
 
-        public async Task<PropertyDetailResponse> SaveAsync(int lessorId, int propertyId ,PropertyDetail propertyDetail)
+        public async Task<PropertyDetailResponse> SaveAsync(int propertyId ,PropertyDetail propertyDetail)
         {
-            var exisitingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
+            var exisitingProperty = await _propertyRepository.FindById(propertyId);
 
             if (exisitingProperty == null)
                 return new PropertyDetailResponse("Property not found");
@@ -52,9 +52,9 @@ namespace Roommates.API.Services
             }
         }
 
-        public async Task<PropertyDetailResponse> UpdateAsync(int lessorId, int propertyId, PropertyDetail propertyDetail)
+        public async Task<PropertyDetailResponse> UpdateAsync(int propertyId, PropertyDetail propertyDetail)
         {
-            var exisitingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
+            var exisitingProperty = await _propertyRepository.FindById(propertyId);
             if (exisitingProperty == null)
                 return new PropertyDetailResponse("Property not found");
 
@@ -83,9 +83,9 @@ namespace Roommates.API.Services
         }
 
 
-        public async Task<PropertyDetailResponse> DeleteAsync(int lessorId, int propertyId)
+        public async Task<PropertyDetailResponse> DeleteAsync(int propertyId)
         {
-            var exisitingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
+            var exisitingProperty = await _propertyRepository.FindById(propertyId);
             if (exisitingProperty == null)
                 return new PropertyDetailResponse("Property not found");
 

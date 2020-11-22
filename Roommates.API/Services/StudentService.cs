@@ -19,7 +19,6 @@ namespace Roommates.API.Services
 
 
         public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork, ITeamRepository teamRepository, ICampusRepository campusRepository)
-
         {
             _studentRepository = studentRepository;
             _unitOfWork = unitOfWork;

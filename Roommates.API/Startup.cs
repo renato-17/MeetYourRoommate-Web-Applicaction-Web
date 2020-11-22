@@ -42,6 +42,7 @@ namespace Roommates.API
             {
                 options.UseMySQL(Configuration.GetConnectionString("MySQLConnection"));
                 //options.UseInMemoryDatabase("meetyourroommate-api-in-memory");
+                //options.UseMySQL(Configuration.GetConnectionString("AzureMySQLConnection"));
             });
 
             services.AddScoped<IPersonRepository, PersonRepository>();

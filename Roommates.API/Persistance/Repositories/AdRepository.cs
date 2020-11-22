@@ -22,22 +22,33 @@ namespace Roommates.API.Persistance.Repositories
 
         public async Task<Ad> FindById(int id)
         {
-            return await _context.Ads.FindAsync(id);
+            return await _context.Ads
+                .Where(a => a.Id == id)
+                .Include(a => a.Property)
+                .FirstAsync();
         }
 
         public async Task<Ad> FindByIdAndLessorIdAndPropertyId(int id, int lessorId, int propertyId)
         {
-            return await _context.Ads.SingleAsync(a => (a.Id == id) && (a.LessorId == lessorId) && (a.PropertyId == propertyId));
+            return await _context.Ads.Include(a=>a.Property).SingleAsync(a => (a.Id == id) && (a.LessorId == lessorId) && (a.PropertyId == propertyId));
         }
 
         public async Task<IEnumerable<Ad>> ListAsync()
         {
-            return await _context.Ads.ToListAsync(); 
+            return await _context.Ads.Include(a => a.Property).ToListAsync();
         }
 
-        public async Task<IEnumerable<Ad>> ListByLessorIdAndPropertyIdAsync(int lessorId, int propertyId)
+        public async Task<IEnumerable<Ad>> ListByLessorIdAsync(int lessorId)
         {
-            return await _context.Ads.Where(a => (a.PropertyId == propertyId && a.LessorId ==lessorId))
+            return await _context.Ads
+                .Where(a => a.LessorId == lessorId)
+                .Include(a => a.Property)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Ad>> ListByPropertyIdAsync(int propertyId)
+        {
+            return await _context.Ads.Where(a => (a.PropertyId == propertyId))
                 .Include(a => a.Property) 
                 .ToListAsync();
         }

@@ -15,7 +15,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Roommates.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AdsController : ControllerBase
     {
@@ -41,7 +41,6 @@ namespace Roommates.API.Controllers
             var resource = _mapper.Map<IEnumerable<Ad>, IEnumerable<AdResource>>(ads);
             return resource;
         }
-
      
         [SwaggerOperation(
             Summary = "Get ad by Id",
@@ -57,6 +56,63 @@ namespace Roommates.API.Controllers
             return resource;
         }
 
+        [SwaggerOperation(
+          Summary = "Create Ad",
+          Description = "Create a new Ad",
+          OperationId = "CreateAd",
+          Tags = new[] { "ads" }
+          )]
+        [HttpPost]
+        public async Task<IActionResult> PostAsync([FromBody] SaveAdResource resource)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetMessages());
+            var ad = _mapper.Map<SaveAdResource, Ad>(resource);
+            var result = await _adService.SaveAsync(ad, resource.LessorId, resource.PropertyId);
+            if (!result.Success)
+                return BadRequest(result.Message);
+            var adResource = _mapper.Map<Ad, AdResource>(ad);
+            return Ok(adResource);
+        }
+
+        [SwaggerOperation(
+           Summary = "Update Ad",
+           Description = "Update an specific Ad",
+           OperationId = "CreateAd",
+           Tags = new[] { "ads" }
+           )]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAsync([FromBody] SaveAdResource resource, int id)
+        {
+            var ad = _mapper.Map<SaveAdResource, Ad>(resource);
+            var result = await _adService.UpdateAsync(ad, id, resource.LessorId, resource.PropertyId);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studentResource = _mapper.Map<Ad, AdResource>(result.Resource);
+
+            return Ok(studentResource);
+        }
+
+        [SwaggerOperation(
+            Summary = "Delete ad",
+            Description = "Delete an specific ad",
+            OperationId = "DeleteAd",
+            Tags = new[] { "ads" }
+            )]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var result = await _adService.DeleteAsync(id);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            var studyCenterResource = _mapper.Map<Ad, AdResource>(result.Resource);
+
+            return Ok(studyCenterResource);
+        }
 
     }
 }
