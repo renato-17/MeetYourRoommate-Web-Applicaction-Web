@@ -10,7 +10,7 @@ namespace Roommates.API.Resource
     {
     
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
     }
 }

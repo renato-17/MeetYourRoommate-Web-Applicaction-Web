@@ -55,14 +55,19 @@ namespace Roommates.API.Services
             return await _adRepository.ListByLessorIdAsync(lessorId);
         }
 
-        public async Task<AdResponse> SaveAsync(Ad ad,int lessorId, int propertyId)
+        public async Task<AdResponse> SaveAsync(Ad ad, int lessorId, int propertyId)
         {
+            var ads = await _adRepository.ListByPropertyIdAsync(propertyId);
+            if (ads.ToList().Count == 2)
+                return new AdResponse("You can not publish more than 2 ads per property");
+
             var existingLessor = await _lessorRepository.FindById(lessorId);
             if (existingLessor == null)
                 return new AdResponse("Lessor not found");
             var existingProperty = await _propertyRepository.FindByIdAndLessorId(lessorId, propertyId);
             if (existingProperty == null)
-                return new AdResponse("Property not found");
+                return new AdResponse("Property not found"); 
+
             ad.Lessor = existingLessor;
             ad.LessorId = existingLessor.Id;
             ad.Property = existingProperty;
@@ -70,6 +75,7 @@ namespace Roommates.API.Services
             ad.Likes = 0;
             ad.Views = 0;
             ad.Close = false;
+
             try
             {
                 await _adRepository.AddAsync(ad);

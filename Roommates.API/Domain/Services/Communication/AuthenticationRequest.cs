@@ -4,17 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Roommates.API.Resource
+namespace Roommates.API.Domain.Services.Communication
 {
-    public class SaveCommentResource
+    public class AuthenticationRequest
     {
         [Required]
-        public int PersonId { get; set; }
-
-
+        public string Mail { get; set; }
         [Required]
-        [MaxLength(150)]
-        public string Description { get; set; }
-
+        public string Password { get; set; }
     }
 }

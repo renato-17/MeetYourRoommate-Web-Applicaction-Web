@@ -1,30 +1,39 @@
-﻿using Microsoft.VisualBasic;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Roommates.API.Domain.Models;
 using Roommates.API.Domain.Repositories;
 using Roommates.API.Domain.Services;
 using Roommates.API.Domain.Services.Communication;
+using Roommates.API.Settings;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Roommates.API.Services
 {
     public class StudentService : IStudentService
     {
+        private readonly AppSettings _appSettings;
+        private readonly IPersonRepository _personRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ICampusRepository _campusRepository;
         private readonly ITeamRepository _teamRepository;
         public readonly IUnitOfWork _unitOfWork;
 
 
-        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork, ITeamRepository teamRepository, ICampusRepository campusRepository)
+        public StudentService(IStudentRepository studentRepository, IUnitOfWork unitOfWork, ITeamRepository teamRepository, ICampusRepository campusRepository,
+            IOptions<AppSettings> appSettings, IPersonRepository personRepository)
         {
             _studentRepository = studentRepository;
             _unitOfWork = unitOfWork;
             _teamRepository = teamRepository;
             _campusRepository = campusRepository;
-
+            _appSettings = appSettings.Value;
+            _personRepository = personRepository;
         }
 
         public async Task<IEnumerable<Student>> GetAllStudentsByTeamId(int teamId)
@@ -52,11 +61,24 @@ namespace Roommates.API.Services
 
         public async Task<StudentResponse> SaveAsync(Student student, int studyCenterId)
         {
+            var person = await _personRepository.FindByDni(student.Dni);
+            if (person != null)
+                return new StudentResponse("Dni already exists");
+
+            person = await _personRepository.FindByMail(student.Mail);
+            if (person != null)
+                return new StudentResponse("Mail already exists");
+
+            person = await _personRepository.FindByPhone(student.Phone);
+            if (person != null)
+                return new StudentResponse("Phone already exists");
+
             var existingCampus = await _campusRepository.FindByIdAndStudyCenterId(studyCenterId, student.CampusId);
             if (existingCampus == null)
                 return new StudentResponse("Study Center or Campus not found");
 
             student.Campus = existingCampus;
+            student.Available = true;
 
             try
             {
@@ -113,7 +135,7 @@ namespace Roommates.API.Services
             existingStudent.Mail = student.Mail;
             existingStudent.Password = student.Password;
             existingStudent.Available = student.Available;
-            
+
             try
             {
                 _studentRepository.Update(existingStudent);
@@ -131,8 +153,11 @@ namespace Roommates.API.Services
         {
             var student = GetByIdAsync(id).Result.Resource;
 
+            if (!student.Available)
+                return new StudentResponse("You should be available to join a team");
+
             if (student.Team != null)
-                return new StudentResponse(student);
+                return new StudentResponse("Student already have team");
 
             var existingTeam = await _teamRepository.FindByName(team.Name);
 
@@ -199,6 +224,38 @@ namespace Roommates.API.Services
 
         }
 
+        public async Task<StudentAuthenticationResponse> Authenticate(AuthenticationRequest request)
+        {
+            var students = await ListAsync();
 
+            var student = students.SingleOrDefault(s =>
+                s.Mail == request.Mail &&
+                s.Password == request.Password
+                );
+
+            if (student == null) return null;
+
+            var token = GenerateJwtToken(student);  
+            return new StudentAuthenticationResponse(student, token);
+        }
+
+        private string GenerateJwtToken(Student student)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, student.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(10),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
     }
 }

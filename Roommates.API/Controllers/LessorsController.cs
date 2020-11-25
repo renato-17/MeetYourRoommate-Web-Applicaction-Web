@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Roommates.API.Domain.Models;
@@ -14,6 +15,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Roommates.API.Controllers
 {
+    //[Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
@@ -116,6 +118,22 @@ namespace Roommates.API.Controllers
             return Ok(lessorResource);
         }
 
-        
+        [SwaggerOperation(
+           Summary = "Authenticate Lessor",
+           Description = "Authenticate an specific Lessor",
+           OperationId = "AuthenticateLessor",
+           Tags = new[] { "lessors" }
+           )]
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticationRequest request)
+        {
+            var response = await _lessorService.Authenticate(request);
+
+            if (response == null)
+                return BadRequest(new { message = "Invalid Username or Password" });
+
+            return Ok(response);
+        }
     }
 }

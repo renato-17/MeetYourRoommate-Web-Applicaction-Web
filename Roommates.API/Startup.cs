@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
+using Microsoft.IdentityModel.Tokens;
 using Roommates.API.Domain.Persistence.Contexts;
 using Roommates.API.Domain.Repositories;
 using Roommates.API.Domain.Services;
 using Roommates.API.Extensions;
 using Roommates.API.Persistance.Repositories;
 using Roommates.API.Services;
+using Roommates.API.Settings;
 
 namespace Roommates.API
 {
@@ -34,7 +31,7 @@ namespace Roommates.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.ActiveCors();
             services.AddCustomSwagger();
 
             services.AddControllers();
@@ -45,6 +42,33 @@ namespace Roommates.API
                 //options.UseInMemoryDatabase("meetyourroommate-api-in-memory");
                 //options.UseMySQL(Configuration.GetConnectionString("AzureMySQLConnection"));
             });
+
+            // AppSettings Section Reference
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            // JSON Web Token Authentication Configuration
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            // Authentication Service Configuration
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IPersonService, PersonService>();
@@ -92,9 +116,7 @@ namespace Roommates.API
             services.AddScoped<IReservationDetailService, ReservationDetailService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
             services.AddAutoMapper(typeof(Startup));
-            services.ActiveCors();
             services.AddRouting(opt => opt.LowercaseUrls = true);
 
            
@@ -109,11 +131,16 @@ namespace Roommates.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors();
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x.SetIsOriginAllowed(origin => true)
+           .AllowAnyMethod()
+           .AllowAnyHeader()
+           .AllowCredentials());
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -122,7 +149,6 @@ namespace Roommates.API
                 endpoints.MapControllers();
             });
             app.UseCustomSwagger();
-
 
         }
     }

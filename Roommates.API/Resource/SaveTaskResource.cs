@@ -9,7 +9,7 @@ namespace Roommates.API.Resource
     public class SaveTaskResource
     {
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Description { get; set; }
     }
 }

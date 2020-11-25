@@ -12,7 +12,7 @@ namespace Roommates.API.Resource
         [MaxLength(100)]
         public string Address { get; set; }
         [Required]
-        [MaxLength(100)]
+        [MaxLength(300)]
         public string Description { get; set; }
         [Required]
         public int LessorId { get; set; }

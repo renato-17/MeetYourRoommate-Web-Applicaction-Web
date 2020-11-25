@@ -3,6 +3,7 @@ using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Roommates.API.Domain.Models
@@ -17,9 +18,14 @@ namespace Roommates.API.Domain.Models
         public string Gender { get; set; }
         public string Address { get; set; }
         public DateTime Birthdate    { get; set; }
-        public string Password { get; set; }
         public string Mail { get; set; }
         public string Discriminator { get; set; }
+
+        [JsonIgnore]
+        public string Password { get; set; }
+        [JsonIgnore]
+        public string Token { get; set; }
+
         //Relation with Comment
         public IList<Comment> Comments { get; set; } = new List<Comment>();
 

@@ -23,31 +23,12 @@ namespace Roommates.API.Extensions
                     Description = "Meet Your Roommate RESTful API",
                     Contact = new OpenApiContact { Name = "CodeMaster Team" }
                 });
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-                c.IncludeXmlComments(xmlPath);
                 
                 c.EnableAnnotations();
             });
             return services;
         }
-        public static IServiceCollection ActiveCors(this IServiceCollection services)
-        {
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                                  builder =>
-                                  {
-                                      builder.WithOrigins("https://meetyourroommateapi.azurewebsites.net")
-                                      .AllowAnyHeader()
-                                      .AllowAnyMethod();
-                                  });
-            });
-
-            return services;
-        }
+        
 
         public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app)
         {
@@ -61,6 +42,23 @@ namespace Roommates.API.Extensions
                 c.RoutePrefix = "api-docs/v1";
             });
             return app;
+        }
+
+        public static IServiceCollection ActiveCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("https://meetyourroommateapi.azurewebsites.net",
+                                          "http://localhost:8080")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
+                                  });
+            });
+
+            return services;
         }
     }
 }

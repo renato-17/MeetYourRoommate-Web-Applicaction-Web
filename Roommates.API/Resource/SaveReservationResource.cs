@@ -8,6 +8,7 @@ namespace Roommates.API.Resource
 {
     public class SaveReservationResource
     {
+
         [Required]
         public DateTime DateStart { get; set; }
         [Required]

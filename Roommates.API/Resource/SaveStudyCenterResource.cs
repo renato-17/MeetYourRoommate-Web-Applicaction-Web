@@ -9,7 +9,7 @@ namespace Roommates.API.Resource
     public class SaveStudyCenterResource
     {
         [Required]
-        [MaxLength(25)]
+        [MaxLength(150)]
         public string Name { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace Roommates.API.Domain.Services
         Task<StudentResponse> RemoveAsync(int id);
         Task<StudentResponse> JoinTeam(Team team, int id);
         Task<StudentResponse> LeaveTeam(int id);
+        Task<StudentAuthenticationResponse> Authenticate(AuthenticationRequest request);
 
     }
 }

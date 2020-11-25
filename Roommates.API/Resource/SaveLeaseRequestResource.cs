@@ -10,5 +10,6 @@ namespace Roommates.API.Resource
     {
         [Required]
         public int PropertyId { get; set; }
+
     }
 }

@@ -10,5 +10,8 @@ namespace Roommates.API.Domain.Repositories
     {
         Task<IEnumerable<Person>> ListAsync();
         Task<Person> FindById(int id);
+        Task<Person> FindByDni(string dni);
+        Task<Person> FindByMail(string mail);
+        Task<Person> FindByPhone(string phone);
     }
 }

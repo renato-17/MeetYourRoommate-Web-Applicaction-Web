@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace Roommates.API.Resource
 {
     public class SaveReservationDetailResource
-    {
+    { 
+
         [Required]
         public int Amount { get; set; }
         [Required]

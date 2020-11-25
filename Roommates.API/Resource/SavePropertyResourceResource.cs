@@ -9,6 +9,7 @@ namespace Roommates.API.Resource
     public class SavePropertyResourceResource
     {
         [Required]
+        [MaxLength(500)]
         public string Type { get; set; }
     }
 }

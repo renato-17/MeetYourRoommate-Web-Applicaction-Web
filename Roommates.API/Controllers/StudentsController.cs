@@ -8,12 +8,14 @@ using Roommates.API.Extensions;
 using Roommates.API.Resource;
 using Roommates.API.Domain.Services;
 using Swashbuckle.AspNetCore.Annotations;
+using Roommates.API.Domain.Services.Communication;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Roommates.API.Controllers
 {
-
+    //[Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
@@ -175,6 +177,24 @@ namespace Roommates.API.Controllers
             var studentResource = _mapper.Map<Student, StudentResource>(result.Resource);
 
             return Ok(studentResource);
+        }
+
+        [SwaggerOperation(
+           Summary = "Authenticate Student",
+           Description = "Authenticate an specific Student",
+           OperationId = "AuthenticateStudent",
+           Tags = new[] { "students" }
+           )]
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticationRequest request)
+        {
+            var response =  await _studentService.Authenticate(request);
+
+            if (response == null)
+                return BadRequest(new { message = "Invalid Username or Password" });
+
+            return Ok(response);
         }
     }
 }

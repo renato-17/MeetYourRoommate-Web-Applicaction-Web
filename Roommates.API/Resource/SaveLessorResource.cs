@@ -16,9 +16,11 @@ namespace Roommates.API.Resource
         public string LastName { get; set; }
         [Required]
         [MaxLength(8)]
+        [MinLength(8)]
         public string Dni { get; set; }
         [Required]
         [MaxLength(13)]
+        [MinLength(9)]
         public string Phone { get; set; }
         [Required]
         public string Gender { get; set; }
@@ -28,9 +30,14 @@ namespace Roommates.API.Resource
         [Required]
         public DateTime Birthdate { get; set; }
         [Required]
-        public string Password { get; set; }
-        [Required]
+        [MaxLength(50)]
         public string Mail { get; set; }
+
+        [Required]
+        [MinLength(6)]
+        [MaxLength(40)]
+        public string Password { get; set; }
+        
         public bool Premium { get; set; }
     }
 }

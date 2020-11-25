@@ -14,5 +14,6 @@ namespace Roommates.API.Domain.Services
         Task<LessorResponse> SaveAsync(Lessor lessor);
         Task<LessorResponse> UpdateAsync(int id, Lessor lessor);
         Task<LessorResponse> RemoveAsync(int id);
+        Task<LessorAuthenticationResponse> Authenticate(AuthenticationRequest request);
     }
 }

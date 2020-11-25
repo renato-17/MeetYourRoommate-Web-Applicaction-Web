@@ -18,6 +18,7 @@ namespace Roommates.API.Resource
         public int Kitchen { get; set; }
         [Required]
         public int Livingroom { get; set; }
+        
         [Required]
         public int Price { get; set; }
 

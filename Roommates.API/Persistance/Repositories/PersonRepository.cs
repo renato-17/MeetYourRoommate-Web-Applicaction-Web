@@ -24,5 +24,25 @@ namespace Roommates.API.Persistance.Repositories
         {
             return await _context.People.ToListAsync();
         }
+
+        public async Task<Person> FindByMail(string mail)
+        {
+            return await _context.People
+                .Where(p => p.Mail == mail)
+                .FirstOrDefaultAsync();
+        }
+        public async Task<Person> FindByPhone(string phone)
+        {
+            return await _context.People
+                .Where(p => p.Phone == phone)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Person> FindByDni(string dni)
+        {
+            return await _context.People
+                .Where(p => p.Dni == dni)
+                .FirstOrDefaultAsync(); 
+        }
     }
 }

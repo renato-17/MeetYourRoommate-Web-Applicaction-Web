@@ -1,10 +1,16 @@
-﻿using Roommates.API.Domain.Models;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Roommates.API.Domain.Models;
 using Roommates.API.Domain.Repositories;
 using Roommates.API.Domain.Services;
 using Roommates.API.Domain.Services.Communication;
+using Roommates.API.Settings;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Roommates.API.Services
@@ -13,12 +19,18 @@ namespace Roommates.API.Services
     {
         private readonly ILessorRepository _lessorRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly AppSettings _appSettings;
+        private readonly IPersonRepository _personRepository;
 
-        public LessorService(ILessorRepository lessorRepository, IUnitOfWork unitOfWork)
+        public LessorService(ILessorRepository lessorRepository, IUnitOfWork unitOfWork, IOptions<AppSettings> appSettings, IPersonRepository personRepository)
         {
             _lessorRepository = lessorRepository;
             _unitOfWork = unitOfWork;
+            _appSettings = appSettings.Value;
+            _personRepository = personRepository;
         }
+
+ 
 
         public async Task<LessorResponse> GetByIdAsync(int id)
         {
@@ -52,6 +64,18 @@ namespace Roommates.API.Services
 
         public async Task<LessorResponse> SaveAsync(Lessor lessor)
         {
+            var person = await _personRepository.FindByDni(lessor.Dni);
+            if (person != null)
+                return new LessorResponse("Dni already exists");
+
+            person = await _personRepository.FindByMail(lessor.Mail);
+            if (person != null)
+                return new LessorResponse("Mail already exists");
+
+            person = await _personRepository.FindByPhone(lessor.Phone);
+            if (person != null)
+                return new LessorResponse("Phone already exists");
+
             try
             {
                 await _lessorRepository.AddAsync(lessor);
@@ -92,6 +116,40 @@ namespace Roommates.API.Services
                 return new LessorResponse($"An error ocurred while updating lessor: {ex.InnerException}");
             }
 
+        }
+
+        public async Task<LessorAuthenticationResponse> Authenticate(AuthenticationRequest request)
+        {
+            var lessors = await ListAsync();
+
+            var lessor = lessors.SingleOrDefault(s =>
+                s.Mail == request.Mail &&
+                s.Password == request.Password
+                );
+
+            if (lessor == null) return null;
+
+            var token = GenerateJwtToken(lessor);
+            return new LessorAuthenticationResponse(lessor, token);
+        }
+
+        private string GenerateJwtToken(Lessor lessor)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, lessor.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(10),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
